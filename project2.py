@@ -1,3 +1,7 @@
+from prettytable import PrettyTable
+from datetime import date
+import datetime
+
 fileName = "test.txt"
 
 _TAGLIST0_1 = ['HEAD', 'TRLR', 'NOTE']
@@ -15,6 +19,20 @@ class Person:
         self.DeathDate = DeathDate
         self.FID_child = FID_child
         self.FID_spouse = FID_spouse
+
+class Family:
+	def __init__(self,ID):
+		self.ID = ID
+		self.Married = 'NA'
+		self.Divorced = 'NA'
+		self.HusbandID = 'NA'
+		self.HusbandName = 'NA'
+		self.WifeID = 'NA'
+		self.WifeName = 'NA'
+		self.Children = []
+	def pfamily(self):
+		print(self.ID + ' ' + self.Married + ' ' +self.Divorced +' '+ self.HusbandID + ' '+ self.WifeID +' ' + ''.join(self.Children))
+
 
 readFile = open(fileName, 'r')
 allContents = readFile.read().splitlines()
@@ -44,21 +62,16 @@ for oneContent in allContents:
 personLineList = []
 onePerson = []
 
-print(allLine)
-print(allLine[2][1])
-print(allLine[2][1] not in _TAGLIST0_2)
-print("-----------")
 for oneline in allLine:
     # ignore all useless line
-    print(oneline[1])
-    print(oneContent[1] not in _TAGLIST0_2)
+    # print(oneline[1])
+    # print(oneline[1] not in _TAGLIST0_2)
 
     if oneline[0] == 0:
-        # print(oneContent[1] in _TAGLIST0_2)
-        if (oneContent[1] not in _TAGLIST0_2):
+        if (oneline[1] not in _TAGLIST0_2):
             continue
     elif oneline[0] == 1:
-        if oneline[1] not in _TAGLIST1_FAM or oneline[1] not in _TAGLIST1_INDI:
+        if oneline[1] not in _TAGLIST1_INDI:
             continue
     else:
         if oneline[1] not in _TAGLIST2:
@@ -74,11 +87,7 @@ for oneline in allLine:
     
     else:
         onePerson.append(oneline)
-
-
-# for i in personLineList:
-#     print(i)
-#     print() 
+personLineList.append(onePerson)
 
 PersonObjectList = []
 for onePersonLine in personLineList:
@@ -114,23 +123,86 @@ for onePersonLine in personLineList:
     onePerson = Person(INDI_id,name,gender,BirthDate,DeathDate,FID_child,FID_spouse)
     PersonObjectList.append(onePerson)
 
-for one in PersonObjectList:
-    print(one.name, one.INDI_id, one.gender, one.BirthDate, one.DeathDate, one.FID_child, one.FID_spouse)
-    # # output
-    # print("<-- ", end='')
-    # if oneContent[0] == 0:
-    #     if oneContent[1] in _TAGLIST0_1 or oneContent[1] in _TAGLIST0_2:
-    #         print(f'{oneContent[0]}|{oneContent[1]}|Y|{oneContent[2]}')
-    #     else:
-    #         print(f'{oneContent[0]}|{oneContent[1]}|N|{oneContent[2]}')
-    # elif oneContent[0] == 1:
-    #     if oneContent[1] in _TAGLIST1_FAM or oneContent[1] in _TAGLIST1_INDI:
-    #         print(f'{oneContent[0]}|{oneContent[1]}|Y|{oneContent[2]}')
-    #     else:
-    #         print(f'{oneContent[0]}|{oneContent[1]}|N|{oneContent[2]}')
-    # else:
-    #     if oneContent[1] in _TAGLIST2:
-    #         print(f'{oneContent[0]}|{oneContent[1]}|Y|{oneContent[2]}')
-    #     else:
-    #         print(f'{oneContent[0]}|{oneContent[1]}|N|{oneContent[2]}')
+family = []
+currentfamily = None
+mp = 0
+dp = 0
+for oneContent in allLine:
+	if oneContent[0]==0 and oneContent[1] == 'FAM':
+		if currentfamily is not None:
+			family.append(currentfamily)
+			currentfamily = None
+		currentfamily = Family(oneContent[2])
+	if oneContent[0] == 1 and oneContent[1] == 'MARR':
+		mp = 1
+	if oneContent[0] ==1 and oneContent[1] == 'DIV':
+		dp = 1
+	if oneContent[0] ==2 and oneContent[1] == 'DATE':
+		if mp == 1:
+			currentfamily.Married = oneContent[2]
+			mp = 0
+		elif dp == 1:
+			currentfamily.Divorced = oneContent[2]
+			dp = 0
+	if oneContent[0] == 1 and oneContent[1] == 'HUSB':
+		currentfamily.HusbandID = oneContent[2]
+	if oneContent[0] == 1 and oneContent[1] == 'WIFE':
+		currentfamily.WifeID = oneContent[2]
+	if oneContent[0] == 1 and oneContent[1] == 'CHIL':
+		currentfamily.Children.append(oneContent[2])
+family.append(currentfamily)
 
+# Sort
+PersonObjectList.sort(key=lambda x: x.INDI_id)
+family.sort(key=lambda x: x.ID)
+
+# Print
+# for one in PersonObjectList:
+#     print(one.name, one.INDI_id, one.gender, one.BirthDate, one.DeathDate, one.FID_child, one.FID_spouse)
+
+
+personTable = PrettyTable()
+personTable.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
+
+for one in PersonObjectList:
+    child = "NA"
+    spouse = "NA"
+    death = "NA"
+    alive = "Y"
+    born = datetime.datetime.strptime(one.BirthDate, "%d %b %Y").date()
+    today = date.today()
+    age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+    
+    if one.FID_child:
+        child = one.FID_child
+    if one.FID_spouse:
+        spouse = one.FID_spouse
+    if one.DeathDate != "" :
+        alive = "N"
+        death = one.DeathDate
+        today = datetime.datetime.strptime(one.DeathDate, "%d %b %Y").date()
+        age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+         
+
+    
+    personTable.add_row([one.INDI_id, one.name, one.gender, one.BirthDate, age , alive ,death , child, spouse])
+
+print(personTable)
+
+familyTable = PrettyTable()
+familyTable.field_names = ["ID", "Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children"]
+for one in family:
+    HusbandName = ""
+    WifeName = ""
+    Children = "NA"
+    if one.Children:
+        Children = one.Children
+    for oneP in PersonObjectList:
+        if oneP.INDI_id == one.HusbandID:
+            one.HusbandName = oneP.name
+        if oneP.INDI_id == one.WifeID:
+            one.WifeName = oneP.name
+    
+    familyTable.add_row([one.ID, one.Married, one.Divorced, one.HusbandID, one.HusbandName, one.WifeID, one.WifeName, Children])
+
+print(familyTable)
