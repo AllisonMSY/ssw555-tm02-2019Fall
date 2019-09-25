@@ -59,16 +59,15 @@ for oneContent in allContents:
     allLine.append(oneContent)
     # print(allLine)
 
+# Person
 personLineList = []
 onePerson = []
 
 for oneline in allLine:
     # ignore all useless line
-    # print(oneline[1])
-    # print(oneline[1] not in _TAGLIST0_2)
 
     if oneline[0] == 0:
-        if (oneline[1] not in _TAGLIST0_2):
+        if (oneline[1] != "INDI"):
             continue
     elif oneline[0] == 1:
         if oneline[1] not in _TAGLIST1_INDI:
@@ -88,6 +87,10 @@ for oneline in allLine:
     else:
         onePerson.append(oneline)
 personLineList.append(onePerson)
+
+# for i in personLineList:
+#     print(i)
+#     print()
 
 PersonObjectList = []
 for onePersonLine in personLineList:
@@ -123,6 +126,7 @@ for onePersonLine in personLineList:
     onePerson = Person(INDI_id,name,gender,BirthDate,DeathDate,FID_child,FID_spouse)
     PersonObjectList.append(onePerson)
 
+# family
 family = []
 currentfamily = None
 mp = 0
@@ -172,7 +176,7 @@ for one in PersonObjectList:
     born = datetime.datetime.strptime(one.BirthDate, "%d %b %Y").date()
     today = date.today()
     age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-    
+
     if one.FID_child:
         child = one.FID_child
     if one.FID_spouse:
