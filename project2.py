@@ -7,8 +7,13 @@ _TAGLIST1_FAM = ['MARR', 'HUSB', 'WIFE', 'CHIL', 'DIV']
 _TAGLIST2 = ['DATE']
 
 class Person:
-    def __init__(self, name, gender, BirthDate, DeathDate, FID_child, FID_spouse)
-    pass
+    def __init__(self, name, gender, BirthDate, DeathDate, FID_child, FID_spouse):
+        self.name = name
+        self.gender = gender
+        self.BirthDate = BirthDate
+        self.DeathDate = DeathDate
+        self.FID_child = FID_child
+        self.FID_spouse = FID_spouse
 
 readFile = open(fileName, 'r')
 allContents = readFile.read().splitlines()
