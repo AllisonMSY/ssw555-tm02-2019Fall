@@ -41,7 +41,7 @@ class Person:
             born = datetime.datetime.strptime(self.BirthDate, "%d %b %Y").date()
             if born < death:
                 return True
-            reason = "ERROR: INDIVIDUAL: US01: LINE#: {}: Died {} before born {}"
+            reason = "ERROR: INDIVIDUAL: US03: LINE#: {}: Died {} before born {}"
             return False, reason.format(self.INDI_id, self.DeathDate,
                                         self.BirthDate)
         return True
