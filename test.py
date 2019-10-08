@@ -1,9 +1,10 @@
 import unittest
+import project4
 
 class test(unittest.TestCase):
 
     def test_upper(self):
-        self.assertEqual('foo'.upper(), 'FO0')
+        self.assertEqual('foo'.upper(), 'FOO')
 
     def test_isupper(self):
         self.assertTrue('FOO'.isupper())
