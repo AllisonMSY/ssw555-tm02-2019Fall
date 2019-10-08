@@ -24,6 +24,7 @@ def get_age(person):
     return age
 
 
+
 class Person:
     def __init__(self, INDI_id, name, gender, BirthDate,
                  DeathDate, FID_child, FID_spouse):
@@ -35,7 +36,43 @@ class Person:
         self.FID_child = FID_child
         self.FID_spouse = FID_spouse
 
+    def birth_before_current_date(self):
+        # Story 01 Birth
+        born = datetime.datetime.strptime(self.BirthDate, "%d %b %Y").date()
+        if born < date.today():
+            return True
+        reason = "ERROR: INDIVIDUAL: US01: LINE#: {}: Birthday {} occurs in the future"
+        return False, reason.format(self.INDI_id, self.BirthDate)
+
+    def death_before_current_date(self):
+        # Story 01 Death
+        if self.DeathDate == '':
+            return True
+        death = datetime.datetime.strptime(self.DeathDate, "%d %b %Y").date()
+        if death < date.today():
+            return True
+        reason = "ERROR: INDIVIDUAL: US01: LINE#: {}: Death {} occurs in the future"
+        return False, reason.format(self.INDI_id, self.DeathDate)
+
+    def birth_before_marriage(self, family):
+        # Story 02
+        born = datetime.datetime.strptime(self.BirthDate, "%d %b %Y").date()
+        for fm in family:
+            if fm.HusbandID == self.INDI_id:
+                marriage = datetime.datetime.strptime(fm.Married, "%d %b %Y").date()
+
+                if born >= marriage:
+                    reason = "ERROR: FAMILY: US02: LINE#: Husband's birth date {} after marriage date {}"
+                    return False, reason.format(self.BirthDate, fm.Married)
+            elif fm.WifeID == self.INDI_id:
+                marriage = datetime.datetime.strptime(fm.Married, "%d %b %Y").date()
+                if born >= marriage:
+                    reason = "ERROR: FAMILY: US02: LINE#: Wife's birth date {} after marriage date {}"
+                    return False, reason.format(self.BirthDate, fm.Married)
+        return True
+
     def birth_before_death(self):
+        # Story 03
         if self.DeathDate:
             death = datetime.datetime.strptime(self.DeathDate, "%d %b %Y").date()
             born = datetime.datetime.strptime(self.BirthDate, "%d %b %Y").date()
@@ -75,6 +112,25 @@ class Family:
         self.WifeID = 'NA'
         self.WifeName = 'NA'
         self.Children = []
+
+    def marry_before_current_date(self):
+        # Story 01 Marry
+        marry = datetime.datetime.strptime(self.Married, "%d %b %Y").date()
+        if marry < date.today():
+            return True
+        reason = "ERROR: FAMILY: US01: LINE#: {}: Marriage date {} occurs in the future"
+        return False, reason.format(self.ID, self.Married)
+
+    def divorce_before_current_date(self):
+        # Story 01 divorce
+        if self.Divorced == 'NA':
+            return True
+        divorce = datetime.datetime.strptime(self.Divorced, "%d %b %Y").date()
+        if divorce < date.today():
+            return True
+        reason = "ERROR: FAMILY: US01: LINE#: {}: Divorced date {} occurs in the future"
+        return False, reason.format(self.ID, self.Divorced)
+
 
     def child_not_birth_before_parents_marriage(self, personObjectList):
         """
@@ -368,8 +424,17 @@ def main():
     ErrorList = []
     # stories about individual
     for person in PersonObjectList:
+        story01_birth = person.birth_before_current_date()
+        story01_death = person.death_before_current_date()
+        story02 = person.birth_before_marriage(family)
         story03 = person.birth_before_death()
         story07 = person.less_than_150()
+        if story01_birth != True:
+            ErrorList.append(story01_birth[1])
+        if story01_death != True:
+            ErrorList.append(story01_death[1])
+        if story02 != True:
+            ErrorList.append(story02[1])
         if story03 != True:
             ErrorList.append(story03[1])
         if story07 != True:
@@ -377,10 +442,16 @@ def main():
 
     # stories about familiy
     for fm in family:
+        story01_marry = fm.marry_before_current_date()
+        story01_divorce = fm.divorce_before_current_date()
         story04 = fm.marriage_before_divorce()
         story05 = fm.parents_not_marray_before_they_dead(PersonObjectList)
         story06 = fm.parents_not_divorce_before_they_dead(PersonObjectList)
         story08 = fm.child_not_birth_before_parents_marriage(PersonObjectList)
+        if story01_marry != True:
+            ErrorList.append(story01_marry[1])
+        if story01_divorce != True:
+            ErrorList.append(story01_divorce[1])
         if story04 != True:
             ErrorList.append(story04[1])
         if story05 != True:
