@@ -18,7 +18,7 @@ class test(unittest.TestCase):
             s.split(2)
     def test_story08(self):
         p1 = project4.Person("I01","adasi","F","DATE 21 DEC 1773","DATE 21 DEC 1973","","")
-        p2 = project4.Person("I02","adasi","F","DATE 21 DEC 1973","","")
+        p2 = project4.Person("I02","adasi","F","DATE 21 DEC 1973","","","")
         self.assertTrue(p2.less_than_150())
         self.assertFalse(p1.less_than_150()[0])
 
