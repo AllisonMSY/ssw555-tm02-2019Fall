@@ -18,9 +18,11 @@ class test(unittest.TestCase):
             s.split(2)
 
     def test_story03(self):
-        p = project4.Person("I03T", "P03", "F", "4 MAR 2000", "4 MAR 2010")
+        p = project4.Person("I03T", "P03", "F", "4 MAR 2000",
+                            "4 MAR 2010", "", "")
         self.assertEqual(p.birth_before_death(), True)
-        p = project4.Person("I03T", "P03", "F", "4 MAR 2010", "4 MAR 2000")
+        p = project4.Person("I03T", "P03", "F", "4 MAR 2010", "4 MAR 2000",
+                            "", "")
         self.assertEqual(p.birth_before_death(), False)
 
 if __name__ == '__main__':
