@@ -31,7 +31,7 @@ ERROR: INDIVIDUAL: US01: LINE#: I02: Death 13 DEC 2048 occurs in the future
 ERROR: FAMILY: US02: LINE#: Husband's birth date 20 JUL 2038 after marriage date 3 FEB 1974
 ERROR: INDIVIDUAL: US03: LINE#: I05: Died 2 APR 1971 before born 4 MAY 1972
 ERROR: FAMILY: US02: LINE#: Husband's birth date 8 OCT 1971 after marriage date 20 SEP 1894
-ERROR: FAMILY: US02: LINE#: Wife's birth date 4 JUN 1973 after marriage date 20 SEP 1894
+ERROR: FAMILY: US02: LINE#: Wife's birth date 4 JUN 1973 following marriage date 20 SEP 1894
 ERROR: INDIVIDUAL: US04: LINE#: F00: Divorced 21 DEC 1973 before married 21 DEC 1973
 ANOMALY: FAMILY: US05: FAM#: F00: Married 21 DEC 1973 after husband's I00 death on 21 DEC 1973
 ANOMALY: FAMILY: US06: FAM#: F00: Divorce 21 DEC 1973 after husband's(I00) death on 21 DEC 1973
