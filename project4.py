@@ -2,7 +2,7 @@ from prettytable import PrettyTable
 from datetime import date
 import datetime
 
-fileName = "testp3.txt"
+fileName = "./test_project4.txt"
 
 _TAGLIST0_1 = ['HEAD', 'TRLR', 'NOTE']
 _TAGLIST0_2 = ['INDI', 'FAM']
@@ -34,6 +34,18 @@ class Person:
         self.DeathDate = DeathDate
         self.FID_child = FID_child
         self.FID_spouse = FID_spouse
+
+    def birth_before_death(self):
+        if self.DeathDate:
+            death = datetime.datetime.strptime(self.DeathDate, "%d %b %Y").date()
+            born = datetime.datetime.strptime(self.BirthDate, "%d %b %Y").date()
+            if born < death:
+                return True
+            reason = "ERROR: INDIVIDUAL: US01: LINE#: {}: Died {} before born {}"
+            return False, reason.format(self.INDI_id, self.DeathDate,
+                                        self.BirthDate)
+        return True
+
 
     def less_than_150(self):
         """
@@ -86,6 +98,21 @@ class Family:
             return True
         else:
             return False, reasonlist
+
+    def marriage_before_divorce(self):
+        if self.Divorced != "NA":
+            # print("Divorced: ", self.Divorced)
+            divorce = datetime.datetime.strptime(self.Divorced,
+                                                 "%d %b %Y").date()
+
+            marry = datetime.datetime.strptime(self.Married,
+                                                 "%d %b %Y").date()
+            if marry < divorce:
+                return True
+            reason = "ERROR: INDIVIDUAL: US04: LINE#: {}: Divorced {} before married {}"
+            return False, reason.format(self.ID, self.Divorced,
+                                        self.Married)
+        return True
 
     def pfamily(self):
         # print(self.ID + ' ' + self.Married + ' ' + self.Divorced + ' ' + \
@@ -274,13 +301,19 @@ def main():
     ErrorList = []
     # stories about individual
     for person in PersonObjectList:
+        story03 = person.birth_before_death()
         story07 = person.less_than_150()
+        if story03 != True:
+            ErrorList.append(story03[1])
         if story07 != True:
             ErrorList.append(story07[1])
 
     # stories about familiy
     for fm in family:
+        story04 = fm.marriage_before_divorce()
         story08 = fm.child_not_birth_before_parents_marriage(PersonObjectList)
+        if story04 != True:
+            ErrorList.append(story04[1])
         if story08 != True:
             for i in range(1, len(story08)):
                 ErrorList.append(story08[i])
