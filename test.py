@@ -30,7 +30,7 @@ class test(unittest.TestCase):
         f.Married, f.Divorced = "4 MAR 2000", "4 MAR 2010"
         self.assertEqual(f.marriage_before_divorce(), True)
         f.Married, f.Divorced = "4 MAR 2010", "4 MAR 2000"
-        self.assertEqual(f.marriage_before_divorce(), False)
+        self.assertEqual(f.marriage_before_divorce()[0], False)
 
 if __name__ == '__main__':
     unittest.main()
