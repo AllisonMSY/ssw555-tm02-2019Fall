@@ -112,8 +112,8 @@ class Family:
                     break
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
-                    if marrdate > deathDate:
-                        
+                    if marrdate >= deathDate:
+
                         reason = "ANOMALY: FAMILY: US05: FAM#: {}: Married {} after husband's {} death on {}"
                         reasonlist.append(reason.format(self.ID, marr, self.HusbandID, dead ))
         # check wife
@@ -124,7 +124,7 @@ class Family:
                     break
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
-                    if marrdate > deathDate:
+                    if marrdate >= deathDate:
                         reason = "ANOMALY: FAMILY: US05: FAM#: {}: Married {} after wife's {} death on {}"
                         reasonlist.append(reason.format(self.ID, marr , self.WifeID, dead ))
         if not reasonlist:
@@ -147,7 +147,7 @@ class Family:
                     break
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
-                    if divcdate > deathDate:
+                    if divcdate >= deathDate:
                         reason = "ANOMALY: FAMILY: US06: FAM#: {}: Divorce {} after husband's({}) death on {}"
                         reasonlist.append(reason.format(self.ID, divc, self.HusbandID, dead ))
         # check wife
@@ -158,7 +158,7 @@ class Family:
                     break
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
-                    if divcdate > deathDate:
+                    if divcdate >= deathDate:
                         reason = "ANOMALY: FAMILY: US06: FAM#: {}: Divorce {} after wife's({}) death on {}"
                         reasonlist.append(reason.format(self.ID, divc, self.WifeID, dead))
         if not reasonlist:
@@ -393,7 +393,11 @@ def main():
             for i in range(1, len(story08)):
                 ErrorList.append(story08[i])
     for error in ErrorList:
-        print(error)
+        if isinstance(error, list):
+            for e in error:
+                print(e)
+        else:
+            print(error)
 
 
 if __name__ == '__main__':
