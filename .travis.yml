@@ -2,5 +2,7 @@ language: python
 python:
   - "3.6"
   - "3.7"
+install: 
+  pip3 install unittest
 script:
-  - pytest
+  python3 test.py
