@@ -251,8 +251,8 @@ def main():
     familyTable.field_names = ["ID", "Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name",
                                "Children"]
     for one in family:
-        HusbandName = ""
-        WifeName = ""
+        # HusbandName = ""
+        # WifeName = ""
         Children = "NA"
         if one.Children:
             Children = one.Children

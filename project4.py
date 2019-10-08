@@ -99,6 +99,73 @@ class Family:
         else:
             return False, reasonlist
 
+    def parents_not_marray_before_they_dead(self, personObjectList):
+        # story 5
+        marr = self.Married
+        marrdate = datetime.datetime.strptime(marr, "%d %b %Y").date()
+        reasonlist=[]
+        # check Husband
+        for person in personObjectList:
+            if person.INDI_id == self.HusbandID:
+                dead = person.DeathDate
+                if(dead == ""):
+                    break
+                else:
+                    deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
+                    if marrdate > deathDate:
+                        
+                        reason = "ANOMALY: FAMILY: US05: FAM#: {}: Married {} after husband's {} death on {}"
+                        reasonlist.append(reason.format(self.ID, marr, self.HusbandID, dead ))
+        # check wife
+        for person in personObjectList:
+            if person.INDI_id == self.WifeID:
+                dead = person.DeathDate
+                if(dead == ""):
+                    break
+                else:
+                    deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
+                    if marrdate > deathDate:
+                        reason = "ANOMALY: FAMILY: US05: FAM#: {}: Married {} after wife's {} death on {}"
+                        reasonlist.append(reason.format(self.ID, marr , self.WifeID, dead ))
+        if not reasonlist:
+            return True
+        else:
+            return False, reasonlist
+
+    def parents_not_divorce_before_they_dead(self, personObjectList):
+        # story 6
+        reasonlist=[]
+        divc = self.Divorced
+        if(divc == "NA"):
+            return True
+        divcdate = datetime.datetime.strptime(divc, "%d %b %Y").date()
+        # check Husband
+        for person in personObjectList:
+            if person.INDI_id == self.HusbandID:
+                dead = person.DeathDate
+                if(dead == ""):
+                    break
+                else:
+                    deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
+                    if divcdate > deathDate:
+                        reason = "ANOMALY: FAMILY: US06: FAM#: {}: Divorce {} after husband's({}) death on {}"
+                        reasonlist.append(reason.format(self.ID, divc, self.HusbandID, dead ))
+        # check wife
+        for person in personObjectList:
+            if person.INDI_id == self.WifeID:
+                dead = person.DeathDate
+                if(dead == ""):
+                    break
+                else:
+                    deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
+                    if divcdate > deathDate:
+                        reason = "ANOMALY: FAMILY: US06: FAM#: {}: Divorce {} after wife's({}) death on {}"
+                        reasonlist.append(reason.format(self.ID, divc, self.WifeID, dead))
+        if not reasonlist:
+            return True
+        else:
+            return False, reasonlist
+
     def marriage_before_divorce(self):
         if self.Divorced != "NA":
             # print("Divorced: ", self.Divorced)
@@ -311,9 +378,17 @@ def main():
     # stories about familiy
     for fm in family:
         story04 = fm.marriage_before_divorce()
+        story05 = fm.parents_not_marray_before_they_dead(PersonObjectList)
+        story06 = fm.parents_not_divorce_before_they_dead(PersonObjectList)
         story08 = fm.child_not_birth_before_parents_marriage(PersonObjectList)
         if story04 != True:
             ErrorList.append(story04[1])
+        if story05 != True:
+            for i in range(1, len(story05)):
+                ErrorList.append(story05[i])
+        if story06 != True:
+            for i in range(1, len(story06)):
+                ErrorList.append(story06[i])
         if story08 != True:
             for i in range(1, len(story08)):
                 ErrorList.append(story08[i])
