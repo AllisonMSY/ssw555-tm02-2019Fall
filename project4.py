@@ -67,7 +67,7 @@ class Person:
             elif fm.WifeID == self.INDI_id:
                 marriage = datetime.datetime.strptime(fm.Married, "%d %b %Y").date()
                 if born >= marriage:
-                    reason = "ERROR: FAMILY: US02: LINE#: Wife's birth date {} after marriage date {}"
+                    reason = "ERROR: FAMILY: US02: LINE#: Wife's birth date {} following marriage date {}"
                     return False, reason.format(self.BirthDate, fm.Married)
         return True
 
