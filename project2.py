@@ -12,6 +12,7 @@ _TAGLIST1_INDI = ['NAME', 'SEX', 'BIRT', 'DEAT', 'FAMC', 'FAMS']
 _TAGLIST1_FAM = ['MARR', 'HUSB', 'WIFE', 'CHIL', 'DIV']
 _TAGLIST2 = ['DATE']
 
+
 class Person:
     def __init__(self, INDI_id, name, gender, BirthDate, DeathDate, FID_child, FID_spouse):
         self.INDI_id = INDI_id
@@ -21,39 +22,43 @@ class Person:
         self.DeathDate = DeathDate
         self.FID_child = FID_child
         self.FID_spouse = FID_spouse
-#story 7 return true if less than 150, ERROR:INDIVIAL:US07:LINE: More than 150 years old - Birth ... :Death ...
+# story 7 return true if less than 150, ERROR:INDIVIAL:US07:LINE: More than 150 years old - Birth ... :Death ...
+
     def less_than_150(self):
         born = datetime.datetime.strptime(self.BirthDate, "%d %b %Y").date()
         if self.DeathDate != "":
-            today = datetime.datetime.strptime(self.DeathDate, "%d %b %Y").date()
-            age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+            today = datetime.datetime.strptime(
+                self.DeathDate, "%d %b %Y").date()
+            age = today.year - born.year - \
+                ((today.month, today.day) < (born.month, born.day))
         else:
             today = date.today()
-            age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+            age = today.year - born.year - \
+                ((today.month, today.day) < (born.month, born.day))
         if age < 150:
             return True
         else:
             if self.DeathDate != "":
                 reason = "ERROR: INDIVIDUAL: US07: LINE#: {}: More than 150 years old - Birth {} : - Death {}"
-                return False, reason.format(self.INDI_id,self.BirthDate,self.DeathDate)
+                return False, reason.format(self.INDI_id, self.BirthDate, self.DeathDate)
             else:
                 reason = "ERROR: INDIVIDUAL: US07: LINE#: {}: More than 150 years old - Birth {}"
-                return False, reason.format(self.INDI_id,self.BirthDate)
-
+                return False, reason.format(self.INDI_id, self.BirthDate)
 
 
 class Family:
-    def __init__(self,ID):
-		self.ID = ID
-		self.Married = 'NA'
-		self.Divorced = 'NA'
-		self.HusbandID = 'NA'
-		self.HusbandName = 'NA'
-		self.WifeID = 'NA'
-		self.WifeName = 'NA'
-		self.Children = []
-#story 8 child cannt birth before parents marriage, return true if the child after marriage
-    def child_not_birth_before_parents_marriage(self,personObjectList):
+    def __init__(self, ID):
+        self.ID = ID
+        self.Married = 'NA'
+        self.Divorced = 'NA'
+        self.HusbandID = 'NA'
+        self.HusbandName = 'NA'
+        self.WifeID = 'NA'
+        self.WifeName = 'NA'
+        self.Children = []
+# story 8 child cannt birth before parents marriage, return true if the child after marriage
+
+    def child_not_birth_before_parents_marriage(self, personObjectList):
         reasonlist = []
         if self.Children:
             for cid in self.Children:
@@ -61,17 +66,22 @@ class Family:
                     if person.INDI_id == cid:
                         born = person.BirthDate
                         marr = self.Married
-                        borndate = datetime.datetime.strptime(born, "%d %b %Y").date()
-                        marrdate = datetime.datetime.strptime(marr, "%d %b %Y").date()
+                        borndate = datetime.datetime.strptime(
+                            born, "%d %b %Y").date()
+                        marrdate = datetime.datetime.strptime(
+                            marr, "%d %b %Y").date()
                         if marrdate > borndate:
                             reason = "ANOMALY: FAMILY: US08: LINE#: {}: Child {} born {} before marriage on {}"
-                            reasonlist.append(reason.format(self.ID,cid,born,marr))
+                            reasonlist.append(reason.format(
+                                self.ID, cid, born, marr))
         if not reasonlist:
             return True
         else:
             return False, reasonlist
+
     def pfamily(self):
-        print(self.ID + ' ' + self.Married + ' ' + self.Divorced + ' ' + self.HusbandID + ' ' + self.WifeID + ' ' + ''.join(self.Children))
+        print(self.ID + ' ' + self.Married + ' ' + self.Divorced + ' ' +
+              self.HusbandID + ' ' + self.WifeID + ' ' + ''.join(self.Children))
 
 
 def main():
@@ -164,7 +174,8 @@ def main():
                         BirthDate = oneline[2]
                     if DeathDate == "temp":
                         DeathDate = oneline[2]
-        onePerson = Person(INDI_id, name, gender, BirthDate, DeathDate, FID_child, FID_spouse)
+        onePerson = Person(INDI_id, name, gender, BirthDate,
+                           DeathDate, FID_child, FID_spouse)
         PersonObjectList.append(onePerson)
 
     # family
@@ -206,7 +217,8 @@ def main():
     #     print(one.name, one.INDI_id, one.gender, one.BirthDate, one.DeathDate, one.FID_child, one.FID_spouse)
 
     personTable = PrettyTable()
-    personTable.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
+    personTable.field_names = [
+        "ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
 
     for one in PersonObjectList:
         child = "NA"
@@ -215,7 +227,8 @@ def main():
         alive = "Y"
         born = datetime.datetime.strptime(one.BirthDate, "%d %b %Y").date()
         today = date.today()
-        age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+        age = today.year - born.year - \
+            ((today.month, today.day) < (born.month, born.day))
 
         if one.FID_child:
             child = one.FID_child
@@ -224,10 +237,13 @@ def main():
         if one.DeathDate != "":
             alive = "N"
             death = one.DeathDate
-            today = datetime.datetime.strptime(one.DeathDate, "%d %b %Y").date()
-            age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+            today = datetime.datetime.strptime(
+                one.DeathDate, "%d %b %Y").date()
+            age = today.year - born.year - \
+                ((today.month, today.day) < (born.month, born.day))
 
-        personTable.add_row([one.INDI_id, one.name, one.gender, one.BirthDate, age, alive, death, child, spouse])
+        personTable.add_row([one.INDI_id, one.name, one.gender,
+                             one.BirthDate, age, alive, death, child, spouse])
 
     print(personTable)
 
@@ -250,20 +266,22 @@ def main():
             [one.ID, one.Married, one.Divorced, one.HusbandID, one.HusbandName, one.WifeID, one.WifeName, Children])
 
     print(familyTable)
-    #The new add of main in project 3
+    # The new add of main in project 3
     ErrorList = []
-    #stories about individual
+    # stories about individual
     for person in PersonObjectList:
         story07 = person.less_than_150()
         if story07 != True:
             ErrorList.append(story07[1])
-    #stories about familiy
+    # stories about familiy
     for fm in family:
         story08 = fm.child_not_birth_before_parents_marriage(PersonObjectList)
         if story08 != True:
-            for i in range (1,len(story08)):
+            for i in range(1, len(story08)):
                 ErrorList.append(story08[i])
     for error in ErrorList:
         print(error)
+
+
 if __name__ == '__main__':
     main()
