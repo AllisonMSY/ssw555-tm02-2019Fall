@@ -3,12 +3,24 @@ import project4
 
 class test(unittest.TestCase):
 
-    def story07(self):
-        p1 = project4.Person(I01, dadasaf,M,'DATE 2 SEP 1741','DATE 21 DEC 1973','','')
-        p2 = project4.Person(I02,dadva,F,'DATE 21 DEC 1943','','','')
-        self.assertFalse(p1.less_than_150()[0])
-        self.assertTrue(p2.less_than_150())
+    def test_upper(self):
+        self.assertEqual('foo'.upper(), 'FOO')
 
+    def test_isupper(self):
+        self.assertTrue('FOO'.isupper())
+        self.assertFalse('Foo'.isupper())
+
+    def test_split(self):
+        s = 'hello world'
+        self.assertEqual(s.split(), ['hello', 'world'])
+        # check that s.split fails when the separator is not a string
+        with self.assertRaises(TypeError):
+            s.split(2)
+    def story08(self):
+        p1 = project4.Person("I01","adasi","F","DATE 21 DEC 1773","DATE 21 DEC 1973","","")
+        p2 = project4.Person("I02","adasi","F","DATE 21 DEC 1973")
+        self.assertTrue(p2.less_than_150())
+        self.assertFalse(p1.less_than_150()[0])
 
 
 if __name__ == '__main__':
