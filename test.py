@@ -17,5 +17,20 @@ class test(unittest.TestCase):
         with self.assertRaises(TypeError):
             s.split(2)
 
+    def test_story03(self):
+        p = project4.Person("I03T", "P03", "F", "4 MAR 2000",
+                            "4 MAR 2010", "", "")
+        self.assertEqual(p.birth_before_death(), True)
+        p = project4.Person("I03T", "P03", "F", "4 MAR 2010", "4 MAR 2000",
+                            "", "")
+        self.assertEqual(p.birth_before_death()[0], False)
+
+    def test_story04(self):
+        f = project4.Family("F04T")
+        f.Married, f.Divorced = "4 MAR 2000", "4 MAR 2010"
+        self.assertEqual(f.marriage_before_divorce(), True)
+        f.Married, f.Divorced = "4 MAR 2010", "4 MAR 2000"
+        self.assertEqual(f.marriage_before_divorce()[0], False)
+
 if __name__ == '__main__':
     unittest.main()
