@@ -155,7 +155,7 @@ class Family:
         else:
             return False, reasonlist
 
-    def parents_not_marray_before_they_dead(self, personObjectList):
+    def parents_not_marry_before_they_dead(self, personObjectList):
         # story 5
         marr = self.Married
         marrdate = datetime.datetime.strptime(marr, "%d %b %Y").date()
@@ -445,7 +445,7 @@ def main():
         story01_marry = fm.marry_before_current_date()
         story01_divorce = fm.divorce_before_current_date()
         story04 = fm.marriage_before_divorce()
-        story05 = fm.parents_not_marray_before_they_dead(PersonObjectList)
+        story05 = fm.parents_not_marry_before_they_dead(PersonObjectList)
         story06 = fm.parents_not_divorce_before_they_dead(PersonObjectList)
         story08 = fm.child_not_birth_before_parents_marriage(PersonObjectList)
         if story01_marry != True:
