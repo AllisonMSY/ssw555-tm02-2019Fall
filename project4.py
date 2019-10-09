@@ -2,7 +2,7 @@ from prettytable import PrettyTable
 from datetime import date
 import datetime
 
-fileName = "./test_project4.txt"
+fileName = "./testFile/test_project4.txt"
 
 _TAGLIST0_1 = ['HEAD', 'TRLR', 'NOTE']
 _TAGLIST0_2 = ['INDI', 'FAM']
