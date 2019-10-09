@@ -33,7 +33,7 @@ class test(unittest.TestCase):
         f1.Children.append("I01")
         f1.Children.append("I02")
         self.assertTrue(f1.child_not_birth_before_parents_marriage(personObj1))
-        self.assertFale(f1.child_not_birth_before_parents_marriage(personObj2)[0])
+        self.assertFalse(f1.child_not_birth_before_parents_marriage(personObj2)[0])
 
 
 if __name__ == '__main__':
