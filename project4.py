@@ -223,6 +223,7 @@ class Family:
             return False, reasonlist
 
     def marriage_before_divorce(self):
+        # story 04
         if self.Divorced != "NA":
             # print("Divorced: ", self.Divorced)
             divorce = datetime.datetime.strptime(self.Divorced,
@@ -238,9 +239,6 @@ class Family:
         return True
 
     def pfamily(self):
-        # print(self.ID + ' ' + self.Married + ' ' + self.Divorced + ' ' + \
-        #     self.HusbandID + ' ' + self.WifeID + ' ' + \
-        #     ''.join(self.Children))
         print("{0} {1} {2} {3} {4} {5}".format(
             self.ID, self.Married, self.Divorced,
             self.HusbandID, self.WifeID, self.Children))
@@ -367,11 +365,6 @@ def main():
     # Sort
     PersonObjectList.sort(key=lambda x: x.INDI_id)
     family.sort(key=lambda x: x.ID)
-
-    # Print
-    # for one in PersonObjectList:
-    #     print(one.name, one.INDI_id, one.gender, one.BirthDate,
-    #           one.DeathDate, one.FID_child, one.FID_spouse)
 
     personTable = PrettyTable()
     personTable.field_names = ["ID", "Name", "Gender", "Birthday",
