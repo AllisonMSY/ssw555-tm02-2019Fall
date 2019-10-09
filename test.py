@@ -3,6 +3,40 @@ import project4
 
 class test(unittest.TestCase):
 
+    def test_story01(self):
+        p1 = project4.Person("I01T", "testPerson1", "M", "24 DEC 1969", "", "", "")
+        self.assertEqual(p1.birth_before_current_date(), True)
+        p2 = project4.Person("I02T", "testPerson2", "F", "9 MAR 2027", "", "", "")
+        self.assertEqual(p2.birth_before_current_date()[0], False)
+        p3 = project4.Person("I03T", "testPerson3", "F", "24 DEC 1980", "25 OCT 1999", "", "")
+        self.assertEqual(p3.death_before_current_date(), True)
+        p4 = project4.Person("I04T", "testPerson4", "M", "24 DEC 1990", "6 JAN 2039", "", "")
+        self.assertEqual(p4.death_before_current_date()[0], False)
+        p5 = project4.Person("I05T", "testPerson5", "M", "15 APR 1956", "", "", "")
+        p6 = project4.Person("I06T", "testPerson6", "F", "27 JUN 1960", "", "", "")
+        f1 = project4.Family("F01T")
+        f1.Married, f1.Divorced, f1.HusbandID, f1.WifeID = "19 NOV 1990", "20 JAN 2004", "I05T", "I06T"
+        self.assertTrue(f1.marry_before_current_date())
+        self.assertTrue(f1.divorce_before_current_date())
+        p7 = project4.Person("I07T", "testPerson7", "F", "25 MAR 2001", "", "", "")
+        p8 = project4.Person("I08T", "testPerson8", "M", "17 MAY 2002", "", "", "")
+        f2 = project4.Family("F02T")
+        f2.Married, f2.Divorced, f2.HusbandID, f2.WifeID = "10 OCT 2027", "14 FEB 2029", "I08T", "I07T"
+        self.assertFalse(f2.marry_before_current_date()[0])
+        self.assertFalse(f2.divorce_before_current_date()[0])
+
+    def test_story02(self):
+        p1 = project4.Person("I01T", "testPerson1", "F", "15 APR 1990", "", "", "")
+        p2 = project4.Person("I02T", "testPerson2", "M", "27 JUN 1987", "", "", "")
+        personList = [p1, p2]
+        f1 = project4.Family("F01T")
+        f1.Married, f1.Divorced, f1.HusbandID, f1.WifeID = "9 MAR 1950", "", "I01T", "I02T"
+        f2 = project4.Family("F02T")
+        f2.Married, f2.Divorced, f2.HusbandID, f2.WifeID = "9 JUL 2015", "11 JUN 2018", "I01T", "I02T"
+        family = [f1, f2]
+        self.assertFalse(p1.birth_before_marriage(family)[0])
+        self.assertTrue(p2.birth_before_marriage(family))
+
     def test_story03(self):
         p = project4.Person("I03T", "P03", "F", "4 MAR 2000",
                             "4 MAR 2010", "", "")
