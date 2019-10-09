@@ -21,6 +21,19 @@ class test(unittest.TestCase):
         p2 = project4.Person("I02","adasi","F","21 DEC 1973","","","")
         self.assertTrue(p2.less_than_150())
         self.assertFalse(p1.less_than_150()[0])
+    def test_story08(self):
+        p1 = project4.Person("I01","adasasfa","F","21 DEC 1993","","","")
+        p2 = project4.Person("I02","faasda","F","21 DEC 1973","","","")
+        personObj1 = []
+        personObj1.append(p1)
+        personObj2 = []
+        personObj2.append(p2)
+        f1 = project4.Family("F00")
+        f1.Married = "21 DEC 1983"
+        f1.Children.append("I01")
+        f1.Children.append("I02")
+        self.assertTrue(f1.child_not_birth_before_parents_marriage(personObj1))
+        self.assertFale(f1.child_not_birth_before_parents_marriage(personObj2)[0])
 
 
 if __name__ == '__main__':
