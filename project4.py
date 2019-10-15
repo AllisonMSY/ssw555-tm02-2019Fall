@@ -1,6 +1,7 @@
 from prettytable import PrettyTable
 from datetime import date
 import datetime
+import readFile
 
 fileName = "./testFile/test_project4.txt"
 
@@ -22,8 +23,6 @@ def get_age(person):
         age = today.year - born.year - \
             ((today.month, today.day) < (born.month, born.day))
     return age
-
-
 
 class Person:
     def __init__(self, INDI_id, name, gender, BirthDate,
@@ -83,7 +82,6 @@ class Person:
                                         self.BirthDate)
         return True
 
-
     def less_than_150(self):
         """
         story 7 return true if less than 150, ERROR:INDIVIAL:US07:LINE:
@@ -130,7 +128,6 @@ class Family:
             return True
         reason = "ERROR: FAMILY: US01: LINE#: {}: Divorced date {} occurs in the future"
         return False, reason.format(self.ID, self.Divorced)
-
 
     def child_not_birth_before_parents_marriage(self, personObjectList):
         """
@@ -245,31 +242,7 @@ class Family:
 
 
 def main():
-    readFile = open(fileName, 'r')
-    allContents = readFile.read().splitlines()
-
-    allContents = [one for one in allContents if one != '']
-
-    # eachLine = [<level>, <tag>, <arguments>]
-    allLine = []
-    for oneContent in allContents:
-        # anayls
-        oneContent = oneContent.split(' ')
-        level = int(oneContent[0])
-        if level == 0:
-            if oneContent[1] in _TAGLIST0_1:
-                tag = oneContent[1]
-                argu = ' '.join(oneContent[2:])
-            else:
-                tag = oneContent[2]
-                argu = oneContent[1]
-        else:
-            tag = oneContent[1]
-            argu = ' '.join(oneContent[2:])
-        oneContent = [level, tag, argu]
-        allLine.append(oneContent)
-        # print(allLine)
-
+    allLine = readFile.readGCFile(fileName)
     # Person
     personLineList = []
     onePerson = []
