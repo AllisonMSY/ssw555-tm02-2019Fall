@@ -248,15 +248,15 @@ def main():
     onePerson = []
 
     for oneline in allLine:
-        if oneline[0] == 0:
-            if (oneline[1] != "INDI"):
-                continue
-        elif oneline[0] == 1:
-            if oneline[1] not in _TAGLIST1_INDI:
-                continue
-        else:
-            if oneline[1] not in _TAGLIST2:
-                continue
+        # if oneline[0] == 0:
+        #     if (oneline[1] != "INDI"):
+        #         continue
+        # elif oneline[0] == 1:
+        #     if oneline[1] not in _TAGLIST1_INDI:
+        #         continue
+        # else:
+        #     if oneline[1] not in _TAGLIST2:
+        #         continue
 
         if oneline[0] == 0 and oneline[1] == "INDI":
             if not onePerson:  # is empty
