@@ -11,13 +11,17 @@ class test(unittest.TestCase):
         self.assertEqual(res, expectResult)
 
     def test_story01(self):
-        p1 = project4.Person("I01T", "testPerson1", "M", "24 DEC 1969", "NA", "NA", "NA")
+        p1 = project4.Person("I01T")
+        p1.name, p1.gender, p1.BirthDate = "testPerson1", "M", "24 DEC 1969"
         self.assertEqual(p1.birth_before_current_date(), True)
-        p2 = project4.Person("I02T", "testPerson2", "F", "9 MAR 2027", "NA", "NA", "NA")
+        p2 = project4.Person("I02T")
+        p2.name, p2.gender, p2.BirthDate = "testPerson2", "F", "9 MAR 2027"
         self.assertEqual(p2.birth_before_current_date()[0], False)
-        p3 = project4.Person("I03T", "testPerson3", "F", "24 DEC 1980", "25 OCT 1999", "NA", "NA")
+        p3 = project4.Person("I03T")
+        p3.name, p3.gender, p3.BirthDate, p3.DeathDate = "testPerson3", "F", "24 DEC 1980", "25 OCT 1999"
         self.assertEqual(p3.death_before_current_date(), True)
-        p4 = project4.Person("I04T", "testPerson4", "M", "24 DEC 1990", "6 JAN 2039", "NA", "NA")
+        p4 = project4.Person("I04T")
+        p4.name, p4.gender, p4.BirthDate, p4.DeathDate = "testPerson4", "M", "24 DEC 1990", "6 JAN 2039"
         self.assertEqual(p4.death_before_current_date()[0], False)
         # p5 = project4.Person("I05T", "testPerson5", "M", "15 APR 1956", "NA", "NA", "NA")
         # p6 = project4.Person("I06T", "testPerson6", "F", "27 JUN 1960", "NA", "NA", "NA")
@@ -33,11 +37,13 @@ class test(unittest.TestCase):
         self.assertFalse(f2.divorce_before_current_date()[0])
 
     def test_story02(self):
-        p1 = project4.Person("I01T", "testPerson1", "F", "15 APR 1990", "NA", "NA", "NA")
-        p2 = project4.Person("I02T", "testPerson2", "M", "27 JUN 1987", "NA", "NA", "NA")
+        p1 = project4.Person("I01T")
+        p1.name, p1.gender, p1.BirthDate = "testPerson1", "F", "15 APR 1990"
+        p2 = project4.Person("I02T")
+        p2.name, p2.gender, p2.BirthDate = "testPerson2", "M", "27 JUN 1987"
         # personList = [p1, p2]
         f1 = project4.Family("F01T")
-        f1.Married, f1.Divorced, f1.HusbandID, f1.WifeID = "9 MAR 1950", "", "I01T", "I02T"
+        f1.Married, f1.Divorced, f1.HusbandID, f1.WifeID = "9 MAR 1950", "", "I01T", "I02T" # may change
         f2 = project4.Family("F02T")
         f2.Married, f2.Divorced, f2.HusbandID, f2.WifeID = "9 JUL 2015", "11 JUN 2018", "I01T", "I02T"
         family = [f1, f2]
@@ -45,11 +51,11 @@ class test(unittest.TestCase):
         self.assertTrue(p2.birth_before_marriage(family))
 
     def test_story03(self):
-        p = project4.Person("I03T", "P03", "F", "4 MAR 2000",
-                            "4 MAR 2010", "NA", "NA")
+        p = project4.Person("I03T")
+        p.name, p.gender, p.BirthDate, p.DeathDate = "P03", "F", "4 MAR 2000","4 MAR 2010"
         self.assertEqual(p.birth_before_death(), True)
-        p = project4.Person("I03T", "P03", "F", "4 MAR 2010", "4 MAR 2000",
-                            "NA", "NA")
+        p = project4.Person("I03T")
+        p.name, p.gender, p.BirthDate, p.DeathDate = "P03", "F", "4 MAR 2010", "4 MAR 2000"
         self.assertEqual(p.birth_before_death()[0], False)
 
     def test_story04(self):
@@ -60,8 +66,10 @@ class test(unittest.TestCase):
         self.assertEqual(f.marriage_before_divorce()[0], False)
 
     def test_story05(self):
-        p1 = project4.Person("I01T", "testName1", "M", "2 SEP 1741", "21 DEC 1973", "NA", "NA")
-        p2 = project4.Person("I02T", "testName2", "F", "19 FEB 1746", "NA", "NA", "NA")
+        p1 = project4.Person("I01T")
+        p1.name, p1.gender, p1.BirthDate, p1.DeathDate = "testName1", "M", "2 SEP 1741", "21 DEC 1973"
+        p2 = project4.Person("I02T")
+        p2.name, p2.gender, p2.BirthDate = "testName2", "F", "19 FEB 1746"
 
         personList = [p1, p2]
 
@@ -76,8 +84,10 @@ class test(unittest.TestCase):
         self.assertTrue(f2.parents_not_marry_before_they_dead(personList))
 
     def test_story06(self):
-        p1 = project4.Person("I01T", "testName1", "M", "2 SEP 1741", "21 DEC 1973", "NA", "NA")
-        p2 = project4.Person("I02T", "testName2", "F", "19 FEB 1746", "NA", "NA", "NA")
+        p1 = project4.Person("I01T")
+        p1.name, p1.gender, p1.BirthDate, p1.DeathDate = "testName1", "M", "2 SEP 1741", "21 DEC 1973"
+        p2 = project4.Person("I02T")
+        p2.name, p2.gender, p2.BirthDate = "testName2", "F", "19 FEB 1746"
 
         personList = [p1, p2]
 
@@ -92,14 +102,20 @@ class test(unittest.TestCase):
         self.assertTrue(f2.parents_not_divorce_before_they_dead(personList))
         
     def test_story07(self):
-        p1 = project4.Person("I01","adasi","F","21 DEC 1773","21 DEC 1973","NA","NA")
-        p2 = project4.Person("I02","adasi","F","21 DEC 1973","NA","NA","NA")
+        p1 = project4.Person("I01")
+        p1.name, p1.gender, p1.BirthDate, p1.DeathDate = "adasi","F","21 DEC 1773","21 DEC 1973"
+        p2 = project4.Person("I02")
+        p2.name, p2.gender, p2.BirthDate = "adasi","F","21 DEC 1973"
         self.assertTrue(p2.less_than_150())
         self.assertFalse(p1.less_than_150()[0])
         
     def test_story08(self):
-        p1 = project4.Person("I01","adasasfa","F","21 DEC 1993","NA","NA","NA")
-        p2 = project4.Person("I02","faasda","F","21 DEC 1973","NA","NA","NA")
+        p1 = project4.Person("I01")
+        p1.name, p1.gender, p1.BirthDate = "adasasfa","F","21 DEC 1993"
+
+        p2 = project4.Person("I02")
+        p2.name, p2.gender, p2.BirthDate = "faasda","F","21 DEC 1973"
+        
         personObj1 = []
         personObj1.append(p1)
         personObj2 = []
