@@ -1,7 +1,14 @@
 import unittest
 import project4
+import readFile
 
 class test(unittest.TestCase):
+
+    def test_readFile(self):
+        fileName = "./testFile/travis_test.txt"
+        res = readFile.readGCFile(fileName)
+        expectResult = [[0, 'INDI', 'I00', 4], [1, 'NAME', 'Ulises /Bubb/', 5], [1, 'SEX', 'M', 6], [1, 'BIRT', '', 8], [2, 'DATE', '2 SEP 1941', 9], [1, 'DEAT', '', 10], [2, 'DATE', '21 DEC 1973', 11], [1, 'FAMS', 'F00', 12], [0, 'FAM', 'F00', 16], [1, 'MARR', '', 17], [2, 'DATE', '14 FEB 1966', 18], [1, 'HUSB', 'I00', 19], [1, 'WIFE', 'I01', 20], [1, 'CHIL', 'I04', 21], [1, 'CHIL', 'I05', 22], [1, 'CHIL', 'I06', 23]]
+        self.assertEqual(res, expectResult)
 
     def test_story01(self):
         p1 = project4.Person("I01T", "testPerson1", "M", "24 DEC 1969", "", "", "")
@@ -67,7 +74,6 @@ class test(unittest.TestCase):
         f2.Married, f2.Divorced, f2.HusbandID, f2.WifeID = "21 DEC 1966", "21 DEC 1969", "I01T", "I02T"
 
         self.assertTrue(f2.parents_not_marry_before_they_dead(personList))
-
 
     def test_story06(self):
         p1 = project4.Person("I01T", "testName1", "M", "2 SEP 1741", "21 DEC 1973", "", "")
