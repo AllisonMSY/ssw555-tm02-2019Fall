@@ -14,7 +14,7 @@ _TAGLIST2 = ['DATE']
 
 def get_age(person):
     born = datetime.datetime.strptime(person.BirthDate, "%d %b %Y").date()
-    if person.DeathDate != "":
+    if person.DeathDate != "NA":
         today = datetime.datetime.strptime(person.DeathDate, "%d %b %Y").date()
         age = today.year - born.year - \
             ((today.month, today.day) < (born.month, born.day))
@@ -25,15 +25,14 @@ def get_age(person):
     return age
 
 class Person:
-    def __init__(self, INDI_id, name, gender, BirthDate,
-                 DeathDate, FID_child, FID_spouse):
+    def __init__(self, INDI_id):
         self.INDI_id = INDI_id
-        self.name = name
-        self.gender = gender
-        self.BirthDate = BirthDate
-        self.DeathDate = DeathDate
-        self.FID_child = FID_child
-        self.FID_spouse = FID_spouse
+        self.name = "NA"
+        self.gender = "NA"
+        self.BirthDate = "NA"
+        self.DeathDate = "NA"
+        self.FID_child = "NA"
+        self.FID_spouse = "NA"
 
     def birth_before_current_date(self):
         # Story 01 Birth
@@ -45,7 +44,7 @@ class Person:
 
     def death_before_current_date(self):
         # Story 01 Death
-        if self.DeathDate == '':
+        if self.DeathDate == 'NA':
             return True
         death = datetime.datetime.strptime(self.DeathDate, "%d %b %Y").date()
         if death < date.today():
@@ -72,7 +71,7 @@ class Person:
 
     def birth_before_death(self):
         # Story 03
-        if self.DeathDate:
+        if self.DeathDate != "NA":
             death = datetime.datetime.strptime(self.DeathDate, "%d %b %Y").date()
             born = datetime.datetime.strptime(self.BirthDate, "%d %b %Y").date()
             if born < death:
@@ -91,7 +90,7 @@ class Person:
         if age < 150:
             return True
         else:
-            if self.DeathDate != "":
+            if self.DeathDate != "NA":
                 reason = "ERROR: INDIVIDUAL: US07: LINE#: {}: More than 150 years old - Birth {} : - Death {}"
                 return False, reason.format(self.INDI_id, self.BirthDate,
                                             self.DeathDate)
@@ -161,7 +160,7 @@ class Family:
         for person in personObjectList:
             if person.INDI_id == self.HusbandID:
                 dead = person.DeathDate
-                if(dead == ""):
+                if(dead == "NA"):
                     break
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
@@ -173,7 +172,7 @@ class Family:
         for person in personObjectList:
             if person.INDI_id == self.WifeID:
                 dead = person.DeathDate
-                if(dead == ""):
+                if(dead == "NA"):
                     break
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
@@ -196,7 +195,7 @@ class Family:
         for person in personObjectList:
             if person.INDI_id == self.HusbandID:
                 dead = person.DeathDate
-                if(dead == ""):
+                if(dead == "NA"):
                     break
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
@@ -207,7 +206,7 @@ class Family:
         for person in personObjectList:
             if person.INDI_id == self.WifeID:
                 dead = person.DeathDate
-                if(dead == ""):
+                if(dead == "NA"):
                     break
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
@@ -272,11 +271,11 @@ def main():
 
     PersonObjectList = []
     for onePersonLine in personLineList:
-        INDI_id = ""
-        name = ""
-        gender = ""
-        BirthDate = ""
-        DeathDate = ""
+        INDI_id = "NA"
+        name = "NA"
+        gender = "NA"
+        BirthDate = "NA"
+        DeathDate = "NA"
         FID_child = []
         FID_spouse = []
         for oneline in onePersonLine:
@@ -301,8 +300,13 @@ def main():
                         BirthDate = oneline[2]
                     if DeathDate == "temp":
                         DeathDate = oneline[2]
-        onePerson = Person(INDI_id, name, gender, BirthDate,
-                           DeathDate, FID_child, FID_spouse)
+        onePerson = Person(INDI_id)
+        onePerson.name = name
+        onePerson.gender = gender
+        onePerson.BirthDate = BirthDate
+        onePerson.DeathDate = DeathDate
+        onePerson.FID_child = FID_child
+        onePerson.FID_spouse = FID_spouse
         PersonObjectList.append(onePerson)
 
     # family
@@ -356,7 +360,7 @@ def main():
             child = one.FID_child
         if one.FID_spouse:
             spouse = one.FID_spouse
-        if one.DeathDate != "":
+        if one.DeathDate != "NA":
             alive = "N"
             death = one.DeathDate
             today = datetime.datetime.strptime(one.DeathDate, "%d %b %Y").date()

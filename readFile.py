@@ -52,12 +52,12 @@ def readGCFile(fileName):
                 checkedLine.append(oneline)
     return checkedLine
 
-def main():
-    fileName = "./testFile/test_project4.txt"
-    res = readGCFile(fileName)
-    for one in res:
-        print(one)
+# def main():
+#     fileName = "./testFile/test_project4.txt"
+#     res = readGCFile(fileName)
+#     for one in res:
+#         print(one)
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
