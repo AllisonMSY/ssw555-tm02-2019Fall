@@ -186,8 +186,8 @@ class Family:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
                     if marrdate >= deathDate:
 
-                        reason = "ANOMALY: FAMILY: US05: FAM#: {}: Married {} after husband's {} death on {}"
-                        reasonlist.append(reason.format(self.ID, marr, self.HusbandID, dead ))
+                        reason = "ANOMALY: FAMILY: US05: LINE#: {}: Married {} after husband's({}) death on {}"
+                        reasonlist.append(reason.format(self.MARRAY_LINE, marr, self.HusbandID, dead ))
         # check wife
         for person in personObjectList:
             if person.INDI_id == self.WifeID:
@@ -197,8 +197,8 @@ class Family:
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
                     if marrdate >= deathDate:
-                        reason = "ANOMALY: FAMILY: US05: FAM#: {}: Married {} after wife's {} death on {}"
-                        reasonlist.append(reason.format(self.ID, marr , self.WifeID, dead ))
+                        reason = "ANOMALY: FAMILY: US05: LINE#: {}: Married {} after wife's({}) death on {}"
+                        reasonlist.append(reason.format(self.MARRAY_LINE, marr , self.WifeID, dead ))
         if not reasonlist:
             return True
         else:
@@ -220,8 +220,8 @@ class Family:
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
                     if divcdate >= deathDate:
-                        reason = "ANOMALY: FAMILY: US06: FAM#: {}: Divorce {} after husband's({}) death on {}"
-                        reasonlist.append(reason.format(self.ID, divc, self.HusbandID, dead ))
+                        reason = "ANOMALY: FAMILY: US06: LINE#: {}: Divorce {} after husband's({}) death on {}"
+                        reasonlist.append(reason.format(self.DIVORCED_LINE, divc, self.HusbandID, dead ))
         # check wife
         for person in personObjectList:
             if person.INDI_id == self.WifeID:
@@ -231,8 +231,8 @@ class Family:
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
                     if divcdate >= deathDate:
-                        reason = "ANOMALY: FAMILY: US06: FAM#: {}: Divorce {} after wife's({}) death on {}"
-                        reasonlist.append(reason.format(self.ID, divc, self.WifeID, dead))
+                        reason = "ANOMALY: FAMILY: US06: LINE#: {}: Divorce {} after wife's({}) death on {}"
+                        reasonlist.append(reason.format(self.DIVORCED_LINE, divc, self.WifeID, dead))
         if not reasonlist:
             return True
         else:
