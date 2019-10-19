@@ -8,13 +8,15 @@ def readGCFile(fileName):
     readFile = open(fileName, 'r')
     allContents = readFile.read().splitlines()
 
-    allContents = [one for one in allContents if one != '']
-
+    allContents = [one for one in allContents]
     # eachLine = [<level>, <tag>, <arguments>]
     allLine = []
-    lineNum = 0
+    lineNum = 1
     for oneContent in allContents:
         # anayls
+        if oneContent == '':
+            lineNum += 1
+            continue
         oneContent = oneContent.split(' ')
         level = int(oneContent[0])
         if level == 0:
