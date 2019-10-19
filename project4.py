@@ -31,8 +31,15 @@ class Person:
         self.gender = "NA"
         self.BirthDate = "NA"
         self.DeathDate = "NA"
-        self.FID_child = "NA"
-        self.FID_spouse = "NA"
+        self.FID_child = []
+        self.FID_spouse = []
+        self.ID_LINE = "NA"
+        self.NAME_LINE = "NA"
+        self.GENDER_LINE = "NA"
+        self.BIRTH_LINE = "NA"
+        self.DEATH_LINE = "NA"
+        self.FAMC_LINE = []
+        self.FAMS_LINE = []
 
     def birth_before_current_date(self):
         # Story 01 Birth
@@ -98,6 +105,13 @@ class Person:
                 reason = "ERROR: INDIVIDUAL: US07: LINE#: {}: More than 150 years old - Birth {}"
                 return False, reason.format(self.INDI_id, self.BirthDate)
 
+    def pPerson(self):
+        print("{0} {1} {2} {3} {4} {5} {6}".format(
+            self.INDI_id, self.name, self.gender,
+            self.BirthDate, self.DeathDate, self.FID_child, self.FID_spouse) )
+        print("{0} {1} {2} {3} {4} {5} {6}".format(
+            self.ID_LINE, self.NAME_LINE, self.GENDER_LINE, self.BIRTH_LINE,
+            self.DEATH_LINE, self.FAMC_LINE, self.FAMS_LINE) )
 
 class Family:
     def __init__(self, ID):
@@ -109,6 +123,12 @@ class Family:
         self.WifeID = 'NA'
         self.WifeName = 'NA'
         self.Children = []
+        self.ID_LINE = "NA"
+        self.MARRAY_LINE = "NA"
+        self.DIVORCED_LINE = "NA"
+        self.HUSBAND_LINE = "NA"
+        self.WIFE_LINE = "NA"
+        self.CHILDREN_LINE = []
 
     def marry_before_current_date(self):
         # Story 01 Marry
@@ -238,6 +258,9 @@ class Family:
         print("{0} {1} {2} {3} {4} {5}".format(
             self.ID, self.Married, self.Divorced,
             self.HusbandID, self.WifeID, self.Children))
+        print("{0} {1} {2} {3} {4} {5}".format(
+            self.ID_LINE, self.MARRAY_LINE, self.DIVORCED_LINE,
+            self.HUSBAND_LINE, self.WIFE_LINE, self.CHILDREN_LINE))
 
 
 def main():
@@ -246,6 +269,7 @@ def main():
     personLineList = []
     onePerson = []
 
+    # perpare for looping people
     for oneline in allLine:
         # if oneline[0] == 0:
         #     if (oneline[1] != "INDI"):
@@ -257,57 +281,74 @@ def main():
         #     if oneline[1] not in _TAGLIST2:
         #         continue
 
-        if oneline[0] == 0 and oneline[1] == "INDI":
-            if not onePerson:  # is empty
-                onePerson.append(oneline)
-            else:
-                personLineList.append(onePerson)
-                onePerson = []
-                onePerson.append(oneline)
+        if oneline[0] == 0:
+            if oneline[1] == "INDI":
+                if not onePerson:  # not have a person
+                    onePerson.append(oneline)
+                else: # have a person
+                    personLineList.append(onePerson)
+                    onePerson = []
+                    onePerson.append(oneline)
+            else: # hit FIM
+                if onePerson: # have a person
+                    personLineList.append(onePerson)
+                    onePerson = []
 
         else:
-            onePerson.append(oneline)
-    personLineList.append(onePerson)
+            if onePerson:
+                onePerson.append(oneline)
+    
+    if onePerson: ## append last person
+        personLineList.append(onePerson) 
 
+    # create object
     PersonObjectList = []
-    for onePersonLine in personLineList:
-        INDI_id = "NA"
-        name = "NA"
-        gender = "NA"
-        BirthDate = "NA"
-        DeathDate = "NA"
+    for onePersonAllLine in personLineList:
+        INDI_id, name, gender, BirthDate, DeathDate = "NA", "NA", "NA", "NA", "NA"
         FID_child = []
         FID_spouse = []
-        for oneline in onePersonLine:
+        ID_LINE, NAME_LINE, GENDER_LINE, BIRTH_LINE, DEATH_LINE = "NA", "NA", "NA", "NA", "NA"
+        FAMC_LINE, FAMS_LINE = [], []
+        for oneline in onePersonAllLine:
             if oneline[0] == 0:
                 INDI_id = oneline[2]
+                ID_LINE = oneline[3]
             if oneline[0] == 1:
                 if oneline[1] == "NAME":
                     name = oneline[2]
+                    NAME_LINE = oneline[3]
                 if oneline[1] == "SEX":
                     gender = oneline[2]
+                    GENDER_LINE = oneline[3]
                 if oneline[1] == "BIRT":
                     BirthDate = "temp"
                 if oneline[1] == "DEAT":
                     DeathDate = "temp"
                 if oneline[1] == "FAMS":
                     FID_spouse.append(oneline[2])
+                    FAMS_LINE.append(oneline[3])
                 if oneline[1] == "FAMC":
                     FID_child.append(oneline[2])
+                    FAMC_LINE.append(oneline[3])
             if oneline[0] == 2:
                 if oneline[1] == "DATE":
                     if BirthDate == "temp":
                         BirthDate = oneline[2]
+                        BIRTH_LINE = oneline[3]
                     if DeathDate == "temp":
                         DeathDate = oneline[2]
+                        DEATH_LINE = oneline[3]                        
         onePerson = Person(INDI_id)
-        onePerson.name = name
-        onePerson.gender = gender
-        onePerson.BirthDate = BirthDate
-        onePerson.DeathDate = DeathDate
-        onePerson.FID_child = FID_child
-        onePerson.FID_spouse = FID_spouse
+        onePerson.name, onePerson.gender, onePerson.BirthDate, onePerson.DeathDate = name, gender, BirthDate, DeathDate
+        onePerson.FID_child, onePerson.FID_spouse = FID_child, FID_spouse
+        onePerson.ID_LINE, onePerson.NAME_LINE, onePerson.GENDER_LINE, onePerson.BIRTH_LINE, onePerson.DEATH_LINE = ID_LINE, NAME_LINE, GENDER_LINE, BIRTH_LINE, DEATH_LINE
+        onePerson.FAMC_LINE, onePerson.FAMS_LINE = FAMC_LINE, FAMS_LINE
         PersonObjectList.append(onePerson)
+
+    # # Test the line number
+    # for one in PersonObjectList:
+    #     one.pPerson()
+
 
     # family
     family = []
@@ -320,6 +361,7 @@ def main():
                 family.append(currentfamily)
                 currentfamily = None
             currentfamily = Family(oneContent[2])
+            currentfamily.ID_LINE = oneContent[3]
         if oneContent[0] == 1 and oneContent[1] == 'MARR':
             mp = 1
         if oneContent[0] == 1 and oneContent[1] == 'DIV':
@@ -327,17 +369,26 @@ def main():
         if oneContent[0] == 2 and oneContent[1] == 'DATE':
             if mp == 1:
                 currentfamily.Married = oneContent[2]
+                currentfamily.MARRAY_LINE = oneContent[3]
                 mp = 0
             elif dp == 1:
                 currentfamily.Divorced = oneContent[2]
+                currentfamily.DIVORCED_LINE = oneContent[3]
                 dp = 0
         if oneContent[0] == 1 and oneContent[1] == 'HUSB':
             currentfamily.HusbandID = oneContent[2]
+            currentfamily.HUSBAND_LINE = oneContent[3]
         if oneContent[0] == 1 and oneContent[1] == 'WIFE':
             currentfamily.WifeID = oneContent[2]
+            currentfamily.WIFE_LINE = oneContent[3]
         if oneContent[0] == 1 and oneContent[1] == 'CHIL':
             currentfamily.Children.append(oneContent[2])
+            currentfamily.CHILDREN_LINE.append(oneContent[3])
     family.append(currentfamily)
+
+    # # Test the line number
+    # for one in family:
+    #     one.pfamily()
 
     # Sort
     PersonObjectList.sort(key=lambda x: x.INDI_id)
@@ -347,6 +398,9 @@ def main():
     personTable.field_names = ["ID", "Name", "Gender", "Birthday",
                                "Age", "Alive", "Death", "Child", "Spouse"]
 
+    # Print
+
+    # print person
     for one in PersonObjectList:
         child = "NA"
         spouse = "NA"
@@ -371,6 +425,7 @@ def main():
 
     print(personTable)
 
+    # print family
     familyTable = PrettyTable()
     familyTable.field_names = ["ID", "Married", "Divorced", "Husband ID",
                                "Husband Name", "Wife ID", "Wife Name",
@@ -390,6 +445,8 @@ def main():
              one.WifeID, one.WifeName, Children])
 
     print(familyTable)
+
+
     # The new add of main in project 3
     ErrorList = []
     # stories about individual

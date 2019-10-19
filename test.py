@@ -43,7 +43,7 @@ class test(unittest.TestCase):
         p2.name, p2.gender, p2.BirthDate = "testPerson2", "M", "27 JUN 1987"
         # personList = [p1, p2]
         f1 = project4.Family("F01T")
-        f1.Married, f1.Divorced, f1.HusbandID, f1.WifeID = "9 MAR 1950", "", "I01T", "I02T" # may change
+        f1.Married, f1.HusbandID, f1.WifeID = "9 MAR 1950", "I01T", "I02T" 
         f2 = project4.Family("F02T")
         f2.Married, f2.Divorced, f2.HusbandID, f2.WifeID = "9 JUL 2015", "11 JUN 2018", "I01T", "I02T"
         family = [f1, f2]
