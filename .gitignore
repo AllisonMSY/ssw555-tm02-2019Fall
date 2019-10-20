@@ -1,3 +1,5 @@
 .vscode/
 .DS_Store/
 __pycache__/
+.~lock.Team02Report.xlsx#
+.idea/
