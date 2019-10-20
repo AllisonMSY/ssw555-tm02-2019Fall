@@ -57,8 +57,8 @@ class Person:
         born = datetime.datetime.strptime(self.BirthDate, "%d %b %Y").date()
         if born < date.today():
             return True
-        reason = "ERROR: INDIVIDUAL: US01: LINE#: {}: Birthday {} occurs in the future"
-        return False, reason.format(self.INDI_id, self.BirthDate)
+        reason = "ERROR: INDIVIDUAL: US01: {}: {}: Birthday {} occurs in the future"
+        return False, reason.format(self.ID_LINE, self.INDI_id, self.BirthDate)
 
     def death_before_current_date(self):
         # Story 01 Death
@@ -67,8 +67,8 @@ class Person:
         death = datetime.datetime.strptime(self.DeathDate, "%d %b %Y").date()
         if death < date.today():
             return True
-        reason = "ERROR: INDIVIDUAL: US01: LINE#: {}: Death {} occurs in the future"
-        return False, reason.format(self.INDI_id, self.DeathDate)
+        reason = "ERROR: INDIVIDUAL: US01: {}: {}: Death {} occurs in the future"
+        return False, reason.format(self.ID_LINE, self.INDI_id, self.DeathDate)
 
     def birth_before_marriage(self, family):
         # Story 02
@@ -78,13 +78,13 @@ class Person:
                 marriage = datetime.datetime.strptime(fm.Married, "%d %b %Y").date()
 
                 if born >= marriage:
-                    reason = "ERROR: FAMILY: US02: LINE#: Husband's birth date {} after marriage date {}"
-                    return False, reason.format(self.BirthDate, fm.Married)
+                    reason = "ERROR: FAMILY: US02: {}: Husband's birth date {} after marriage date {}"
+                    return False, reason.format(self.ID_LINE, self.BirthDate, fm.Married)
             elif fm.WifeID == self.INDI_id:
                 marriage = datetime.datetime.strptime(fm.Married, "%d %b %Y").date()
                 if born >= marriage:
-                    reason = "ERROR: FAMILY: US02: LINE#: Wife's birth date {} following marriage date {}"
-                    return False, reason.format(self.BirthDate, fm.Married)
+                    reason = "ERROR: FAMILY: US02: {}: Wife's birth date {} following marriage date {}"
+                    return False, reason.format(self.ID_LINE, self.BirthDate, fm.Married)
         return True
 
     def birth_before_death(self):
@@ -122,7 +122,7 @@ class Person:
         person_dict = dict()
         for person in personObjectList:
             if person.INDI_id in person_dict:
-                reason = "ERROR: INDIVIDUAL: US22: LINE#: {}: {} is not a unique ID"
+                reason = "ERROR: INDIVIDUAL: US22: {}: {} is not a unique ID"
                 reasonList.append(reason.format(person.ID_LINE, person.INDI_id))
             else:
                 person_dict[person.INDI_id] = 1
@@ -176,8 +176,8 @@ class Family:
         marry = datetime.datetime.strptime(self.Married, "%d %b %Y").date()
         if marry < date.today():
             return True
-        reason = "ERROR: FAMILY: US01: LINE#: {}: Marriage date {} occurs in the future"
-        return False, reason.format(self.ID, self.Married)
+        reason = "ERROR: FAMILY: US01: {}: {}: Marriage date {} occurs in the future"
+        return False, reason.format(self.ID_LINE, self.ID, self.Married)
 
     def divorce_before_current_date(self):
         # Story 01 divorce
@@ -186,8 +186,8 @@ class Family:
         divorce = datetime.datetime.strptime(self.Divorced, "%d %b %Y").date()
         if divorce < date.today():
             return True
-        reason = "ERROR: FAMILY: US01: LINE#: {}: Divorced date {} occurs in the future"
-        return False, reason.format(self.ID, self.Divorced)
+        reason = "ERROR: FAMILY: US01: {}: {}: Divorced date {} occurs in the future"
+        return False, reason.format(self.ID_LINE, self.ID, self.Divorced)
 
     def child_not_birth_before_parents_marriage(self, personObjectList):
         """
@@ -238,7 +238,7 @@ class Family:
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
                     if marrdate >= deathDate:
-                        reason = "ANOMALY: FAMILY: US05: LINE#: {}: Married {} after wife's({}) death on {}"
+                        reason = "ANOMALY: FAMILY: US05: {}: Married {} after wife's({}) death on {}"
                         reasonlist.append(reason.format(self.MARRAY_LINE, marr , self.WifeID, dead ))
         if not reasonlist:
             return True
@@ -272,7 +272,7 @@ class Family:
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
                     if divcdate >= deathDate:
-                        reason = "ANOMALY: FAMILY: US06: LINE#: {}: Divorce {} after wife's({}) death on {}"
+                        reason = "ANOMALY: FAMILY: US06: {}: Divorce {} after wife's({}) death on {}"
                         reasonlist.append(reason.format(self.DIVORCED_LINE, divc, self.WifeID, dead))
         if not reasonlist:
             return True
@@ -360,7 +360,7 @@ class Family:
         # story 09
         reasonlist = []
         if self.Children:
-            for cid in self.Children:
+            for idx, cid in enumerate(self.Children):
                 for person in personObjectList:
                     if person.INDI_id == cid:
                         born = person.BirthDate
@@ -378,8 +378,8 @@ class Family:
                                     deathdate_m = datetime.datetime.strptime(dead, "%d %b %Y").month
 
                                     if (borndate_y - deathdate_y) * 12 + (borndate_m - deathdate_m) > 9:
-                                        reason = "ANOMALY: FAMILY: US09: LINE#: {}: Child {} born {} after 9 month after husband's({}) death on {}"
-                                        reasonlist.append(reason.format(self.ID, cid, born, self.HusbandID, dead))
+                                        reason = "ANOMALY: FAMILY: US09: {}: {}: Child {} born {} after 9 month after husband's({}) death on {}"
+                                        reasonlist.append(reason.format(self.CHILDREN_LINE[idx], self.ID, cid, born, self.HusbandID, dead))
                         # check wife
                         for person in personObjectList:
                             if person.INDI_id == self.WifeID:
@@ -389,8 +389,8 @@ class Family:
                                 else:
                                     deathdate = datetime.datetime.strptime(dead, "%d %b %Y").date()
                                     if borndate > deathdate:
-                                        reason = "ANOMALY: FAMILY: US09: LINE#: {}: Child {} born {} after wife's({}) death on {}"
-                                        reasonlist.append(reason.format(self.ID, cid, born, self.WifeID, dead))
+                                        reason = "ANOMALY: FAMILY: US09: {}: {}: Child {} born {} after wife's({}) death on {}"
+                                        reasonlist.append(reason.format(self.CHILDREN_LINE[idx], self.ID, cid, born, self.WifeID, dead))
         if not reasonlist:
             return True
         else:
@@ -402,7 +402,7 @@ class Family:
         family_dict = dict()
         for fm in family:
             if fm.ID in family_dict:
-                reason = "ERROR: FAMILY: US22: LINE#: {}: {} is not a unique ID"
+                reason = "ERROR: FAMILY: US22: {}: {} is not a unique ID"
                 reasonList.append(reason.format(fm.ID_LINE, fm.ID))
             else:
                 family_dict[fm.ID] = 1
@@ -629,6 +629,10 @@ def main():
     if story22 != True:
         ErrorList.append(story22[1])
 
+    story23 = person.unique_name_and_birth_date(PersonObjectList)
+    if story23 != True:
+        ErrorList.append(story23[1])
+
     # stories about familiy
     for fm in family:
         story01_marry = fm.marry_before_current_date()
@@ -671,6 +675,11 @@ def main():
     if story22 != True:
         for i in range(1, len(story22)):
             ErrorList.append(story22[i])
+
+    story24 = fm.unique_families_by_spouses(family)
+    if story24 != True:
+        for i in range(1, len(story24)):
+            ErrorList.append(story24[i])
 
     for error in ErrorList:
         if isinstance(error, list):
