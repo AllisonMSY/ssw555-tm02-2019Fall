@@ -3,3 +3,4 @@
 __pycache__/
 .~lock.Team02Report.xlsx#
 .idea/
+*pyc
