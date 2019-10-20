@@ -141,7 +141,7 @@ class test(unittest.TestCase):
         f1.Married,f1.HusbandID,f1.WifeID = "21 NOV 2000","I01T","I03T"
         f2.Married,f2.HusbandID,f2.WifeID = "21 DEC 2000","I02T","I03T"
         self.assertTrue(f1.marriage_after_14(personList1))
-        self.assertTrue(f2.marriage_after_14(personList2)[0])
+        self.assertFalse(f2.marriage_after_14(personList2)[0])
 
 
 if __name__ == '__main__':
