@@ -172,7 +172,7 @@ class Family:
             return False, reasonlist
 
     def parents_not_marry_before_they_dead(self, personObjectList):
-        # story 5
+        # story 05
         marr = self.Married
         marrdate = datetime.datetime.strptime(marr, "%d %b %Y").date()
         reasonlist=[]
@@ -205,7 +205,7 @@ class Family:
             return False, reasonlist
 
     def parents_not_divorce_before_they_dead(self, personObjectList):
-        # story 6
+        # story 06
         reasonlist=[]
         divc = self.Divorced
         if(divc == "NA"):
@@ -253,6 +253,46 @@ class Family:
             return False, reason.format(self.ID, self.Divorced,
                                         self.Married)
         return True
+
+    def birth_before_death_of_parents(self, personObjectList):
+        # story 09
+        reasonlist = []
+        if self.Children:
+            for cid in self.Children:
+                for person in personObjectList:
+                    if person.INDI_id == cid:
+                        born = person.BirthDate
+                        borndate = datetime.datetime.strptime(born, "%d %b %Y").date()
+                        # check Husband
+                        for person in personObjectList:
+                            if person.INDI_id == self.HusbandID:
+                                dead = person.DeathDate
+                                if (dead == "NA"):
+                                    break
+                                else:
+                                    borndate_y = datetime.datetime.strptime(born, "%d %b %Y").year
+                                    deathdate_y = datetime.datetime.strptime(dead, "%d %b %Y").year
+                                    borndate_m = datetime.datetime.strptime(born, "%d %b %Y").month
+                                    deathdate_m = datetime.datetime.strptime(dead, "%d %b %Y").month
+                                    if (borndate_y - deathdate_y)*12 + (borndate_m - deathdate_m) > 9:
+                                        reason = "ANOMALY: FAMILY: US09: LINE#: {}: Child {} born {} after 9 month after husband's({}) death on {}"
+                                        reasonlist.append(reason.format(self.ID, cid, born, self.HusbandID, dead))
+                        # check wife
+                        for person in personObjectList:
+                            if person.INDI_id == self.WifeID:
+                                dead = person.DeathDate
+                                if (dead == "NA"):
+                                    break
+                                else:
+                                    deathdate = datetime.datetime.strptime(dead, "%d %b %Y").date()
+                                    if borndate > deathdate:
+                                        reason = "ANOMALY: FAMILY: US09: LINE#: {}: Child {} born {} after wife's({}) death on {}"
+                                        reasonlist.append(reason.format(self.ID, cid, born, self.WifeID, dead))
+        if not reasonlist:
+            return True
+        else:
+            return False, reasonlist
+
 
     def pfamily(self):
         print("{0} {1} {2} {3} {4} {5}".format(
@@ -475,6 +515,7 @@ def main():
         story05 = fm.parents_not_marry_before_they_dead(PersonObjectList)
         story06 = fm.parents_not_divorce_before_they_dead(PersonObjectList)
         story08 = fm.child_not_birth_before_parents_marriage(PersonObjectList)
+        story09 = fm.birth_before_death_of_parents(PersonObjectList)
         if story01_marry != True:
             ErrorList.append(story01_marry[1])
         if story01_divorce != True:
@@ -490,6 +531,9 @@ def main():
         if story08 != True:
             for i in range(1, len(story08)):
                 ErrorList.append(story08[i])
+        if story09 != True:
+            for i in range(1, len(story09)):
+                ErrorList.append(story09[i])
     for error in ErrorList:
         if isinstance(error, list):
             for e in error:
