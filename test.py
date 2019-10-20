@@ -170,6 +170,21 @@ class test(unittest.TestCase):
         self.assertTrue(f1.marriage_after_14(personList1))
         self.assertFalse(f2.marriage_after_14(personList2)[0])
 
+    def test_story22(self):
+        p1 = project4.Person("I01")
+        p2 = project4.Person("I01")
+        p3 = project4.Person("I02")
+        personList1 = [p1, p2]
+        personList2 = [p2, p3]
+        f1 = project4.Family("F00")
+        f2 = project4.Family("F00")
+        f3 = project4.Family("F01")
+        familyList1 = [f1, f2]
+        familyList2 = [f2, f3]
+        self.assertTrue(f3.unique_family_id(familyList2))
+        self.assertTrue(p3.unique_person_id(personList2))
+        self.assertFalse(p1.unique_person_id(personList1)[0])
+        self.assertFalse(f1.unique_family_id(familyList1)[0])
 
 if __name__ == '__main__':
     unittest.main()

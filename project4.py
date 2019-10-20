@@ -115,6 +115,21 @@ class Person:
                 reason = "ERROR: INDIVIDUAL: US07:{}: {}: More than 150 years old - Birth {}"
                 return False, reason.format(self.BIRTH_LINE,self.INDI_id, self.BirthDate)
 
+    def unique_person_id(self, personObjectList):
+        #story 22-1
+        reasonList=[]
+        person_dict = dict()
+        for person in personObjectList:
+            if person.INDI_id in person_dict:
+                reason = "ERROR: INDIVIDUAL: US22: LINE#: {}: {} is not a unique ID"
+                reasonList.append(reason.format(person.ID_LINE, person.INDI_id))
+            else:
+                person_dict[person.INDI_id] = 1
+        if not reasonList:
+            return True
+        else:
+            return False, reasonList
+
     def pPerson(self):
         print("{0} {1} {2} {3} {4} {5} {6}".format(
             self.INDI_id, self.name, self.gender,
@@ -350,33 +365,20 @@ class Family:
         else:
             return False, reasonlist
 
-    def unique_PersonID(self):
-        #story 22-1
+    def unique_family_id(self, family):
+        #story 22-2
         reasonList=[]
-        self.INDI_id = dict()
-        reason = "ERROR: INDIVIDUAL: US22: LINE#: {}: {} and {} have the same personal ID {}"
-
-        for person in personObjectList:
-            if person.INDI_id == self.HusbandID:
-                if person.get_first_name() in firstname:
-                    reasonList.append(reason.format(person.NAME_LINE,self.HusbandID,self.ID,firstname[person.get_first_name()],self.HusbandID,person.get_first_name()))
-                else:
-                    firstname[person.get_first_name()]=person.INDI_id
-            if person.INDI_id == self.WifeID:
-                if person.get_first_name() in firstname:
-                    reasonList.append(reason.format(person.NAME_LINE,self.WifeID,self.ID,firstname[person.get_first_name()],self.WifeID,person.get_first_name()))
-                else:
-                    firstname[person.get_first_name()]=person.INDI_id
-            for child in self.Children:
-                if person.INDI_id == child:
-                    if person.get_first_name() in firstname:
-                        reasonList.append(reason.format(person.NAME_LINE, child, self.ID, firstname[person.get_first_name()],child, person.get_first_name()))
-                    else:
-                        firstname[person.get_first_name()]=person.INDI_id
+        family_dict = dict()
+        for fm in family:
+            if fm.ID in family_dict:
+                reason = "ERROR: FAMILY: US22: LINE#: {}: {} is not a unique ID"
+                reasonList.append(reason.format(fm.ID_LINE, fm.ID))
+            else:
+                family_dict[fm.ID] = 1
         if not reasonList:
             return True
         else:
-            return False,reasonList
+            return False, reasonList
 
 
     def pfamily(self):
@@ -592,6 +594,10 @@ def main():
         if story07 != True:
             ErrorList.append(story07[1])
 
+    story22 = person.unique_person_id(PersonObjectList)
+    if story22 != True:
+        ErrorList.append(story22[1])
+
     # stories about familiy
     for fm in family:
         story01_marry = fm.marry_before_current_date()
@@ -629,6 +635,11 @@ def main():
         if story25 != True:
             for i in range(1,len(story25)):
                 ErrorList.append(story25[i])
+
+    story22 = fm.unique_family_id(family)
+    if story22 != True:
+        for i in range(1, len(story22)):
+            ErrorList.append(story22[i])
 
     for error in ErrorList:
         if isinstance(error, list):
