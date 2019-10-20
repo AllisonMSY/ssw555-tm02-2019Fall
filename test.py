@@ -127,6 +127,22 @@ class test(unittest.TestCase):
         self.assertTrue(f1.child_not_birth_before_parents_marriage(personObj1))
         self.assertFalse(f1.child_not_birth_before_parents_marriage(personObj2)[0])
 
+    def test_story10(self):
+        p1 = project4.Person("I01T")
+        p2 = project4.Person("I02T")
+        p3 = project4.Person("I03T")
+        p1.name,p1.gender,p1.BirthDate = "adasd","M","21 DEC 1973"
+        p2.name,p2.gender,p2.BirthDate = "dacadaw", "M","21 SEP 1993"
+        p3.name,p3.gender,p3.BirthDate = "badacaaq","F","21 DEC 1983"
+        personList1=[p1,p3]
+        personList2=[p2,p3]
+        f1 = project4.Family("F00T")
+        f2 = project4.Family("F01T")
+        f1.Married,f1.HusbandID,f1.WifeID = "21 NOV 2000","I01T","I03T"
+        f2.Married,f2.HusbandID,f2.WifeID = "21 DEC 2000","I02T","I03T"
+        self.assertTrue(f1.marriage_after_14(personList1))
+        self.assertTrue(f2.marriage_after_14(personList2)[0])
+
 
 if __name__ == '__main__':
     unittest.main()

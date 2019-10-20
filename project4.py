@@ -3,7 +3,7 @@ from datetime import date
 import datetime
 import readFile
 
-fileName = "./testFile/test_project4.txt"
+fileName = "./testFile/test_project5.txt"
 
 _TAGLIST0_1 = ['HEAD', 'TRLR', 'NOTE']
 _TAGLIST0_2 = ['INDI', 'FAM']
@@ -23,6 +23,13 @@ def get_age(person):
         age = today.year - born.year - \
             ((today.month, today.day) < (born.month, born.day))
     return age
+#return the year between first and second, this assume first is later than second
+def get_year_gap(first,second):
+    first_year = datetime.datetime.strptime(first, "%d %b %Y").date()
+    second_year = datetime.datetime.strptime(second, "%d %b %Y").date()
+    gap = first_year.year - second_year.year - \
+          ((first_year.month, first_year.day) < (second_year.month, second_year.day))
+    return gap
 
 class Person:
     def __init__(self, INDI_id):
@@ -40,6 +47,9 @@ class Person:
         self.DEATH_LINE = "NA"
         self.FAMC_LINE = []
         self.FAMS_LINE = []
+
+    def get_first_name(self):
+        return self.name.split(' ')[0]
 
     def birth_before_current_date(self):
         # Story 01 Birth
@@ -98,12 +108,12 @@ class Person:
             return True
         else:
             if self.DeathDate != "NA":
-                reason = "ERROR: INDIVIDUAL: US07: LINE#: {}: More than 150 years old - Birth {} : - Death {}"
-                return False, reason.format(self.INDI_id, self.BirthDate,
+                reason = "ERROR: INDIVIDUAL: US07:{}: {}: More than 150 years old - Birth {} : - Death {}"
+                return False, reason.format(self.BIRTH_LINE,self.INDI_id, self.BirthDate,
                                             self.DeathDate)
             else:
-                reason = "ERROR: INDIVIDUAL: US07: LINE#: {}: More than 150 years old - Birth {}"
-                return False, reason.format(self.INDI_id, self.BirthDate)
+                reason = "ERROR: INDIVIDUAL: US07:{}: {}: More than 150 years old - Birth {}"
+                return False, reason.format(self.BIRTH_LINE,self.INDI_id, self.BirthDate)
 
     def pPerson(self):
         print("{0} {1} {2} {3} {4} {5} {6}".format(
@@ -163,8 +173,8 @@ class Family:
                         borndate = datetime.datetime.strptime(born, "%d %b %Y").date()
                         marrdate = datetime.datetime.strptime(marr, "%d %b %Y").date()
                         if marrdate > borndate:
-                            reason = "ANOMALY: FAMILY: US08: LINE#: {}: Child {} born {} before marriage on {}"
-                            reasonlist.append(reason.format(self.ID, cid,
+                            reason = "ANOMALY: FAMILY: US08:{}: {}: Child {} born {} before marriage on {}"
+                            reasonlist.append(reason.format(self.MARRAY_LINE, self.ID, cid,
                                                             born, marr))
         if not reasonlist:
             return True
@@ -253,6 +263,51 @@ class Family:
             return False, reason.format(self.ID, self.Divorced,
                                         self.Married)
         return True
+
+    def marriage_after_14(self,personObjectList):
+        #story 10
+        reasonList = []
+        if self.Married != "NA":
+            for person in personObjectList:
+                if person.INDI_id == self.HusbandID:
+                    if get_year_gap(self.Married,person.BirthDate)<14:
+                        reason = "ERROR:FAMILY:US10:{}: {}: Marriage {} before husband ({}) who born on {} was 14 years old"
+                        reasonList.append(reason.format(self.MARRAY_LINE,self.ID,self.Married,self.HusbandID,person.BirthDate))
+                elif person.INDI_id == self.WifeID:
+                    if get_year_gap(self.Married,person.BirthDate)<14:
+                        reason = "ERROR:FAMILY:US10:{}: {}: Marriage {} before wife ({}) who born on {} was 14 years old"
+                        reasonList.append(reason.format(self.MARRAY_LINE,self.ID,self.Married,self.WifeID,person.BirthDate))
+        if not reasonList:
+            return True
+        else:
+            return False,reasonList
+
+    def unique_first_name_in_family(self,personObjectList):
+        #story 25
+        reasonList=[]
+        firstname = dict()
+        reason = "ERROR:Family:US25:{}:{}:In famliy {}, {} and {} have same first name {}"
+        for person in personObjectList:
+            if person.INDI_id == self.HusbandID:
+                if person.get_first_name() in firstname:
+                    reasonList.append(reason.format(person.NAME_LINE,self.HusbandID,self.ID,firstname[person.get_first_name()],self.HusbandID,person.get_first_name()))
+                else:
+                    firstname[person.get_first_name()]=person.INDI_id
+            if person.INDI_id == self.WifeID:
+                if person.get_first_name() in firstname:
+                    reasonList.append(reason.format(person.NAME_LINE,self.WifeID,self.ID,firstname[person.get_first_name()],self.WifeID,person.get_first_name()))
+                else:
+                    firstname[person.get_first_name()]=person.INDI_id
+            for child in self.Children:
+                if person.INDI_id == child:
+                    if person.get_first_name() in firstname:
+                        reasonList.append(reason.format(person.NAME_LINE, child, self.ID, firstname[person.get_first_name()],child, person.get_first_name()))
+                    else:
+                        firstname[person.get_first_name()]=person.INDI_id
+        if not reasonList:
+            return True
+        else:
+            return False,reasonList
 
     def pfamily(self):
         print("{0} {1} {2} {3} {4} {5}".format(
@@ -475,6 +530,8 @@ def main():
         story05 = fm.parents_not_marry_before_they_dead(PersonObjectList)
         story06 = fm.parents_not_divorce_before_they_dead(PersonObjectList)
         story08 = fm.child_not_birth_before_parents_marriage(PersonObjectList)
+        story10 = fm.marriage_after_14(PersonObjectList)
+        story25 = fm.unique_first_name_in_family(PersonObjectList)
         if story01_marry != True:
             ErrorList.append(story01_marry[1])
         if story01_divorce != True:
@@ -490,6 +547,12 @@ def main():
         if story08 != True:
             for i in range(1, len(story08)):
                 ErrorList.append(story08[i])
+        if story10 != True:
+            for i in range(1,len(story10)):
+                ErrorList.append(story10[i])
+        if story25 != True:
+            for i in range(1,len(story25)):
+                ErrorList.append(story25[i])
     for error in ErrorList:
         if isinstance(error, list):
             for e in error:
