@@ -116,6 +116,21 @@ class Person:
                 reason = "ERROR: INDIVIDUAL: US07:{}: {}: More than 150 years old - Birth {}"
                 return False, reason.format(self.BIRTH_LINE,self.INDI_id, self.BirthDate)
 
+    def unique_person_id(self, personObjectList):
+        #story 22-1
+        reasonList=[]
+        person_dict = dict()
+        for person in personObjectList:
+            if person.INDI_id in person_dict:
+                reason = "ERROR: INDIVIDUAL: US22: LINE#: {}: {} is not a unique ID"
+                reasonList.append(reason.format(person.ID_LINE, person.INDI_id))
+            else:
+                person_dict[person.INDI_id] = 1
+        if not reasonList:
+            return True
+        else:
+            return False, reasonList
+
     def unique_name_and_birth_date(self, personObjectList):
         # story 23
         name_birth_dict = collections.defaultdict(int)
@@ -129,6 +144,7 @@ class Person:
         if reason_list:
             return False, reason_list
         return True
+
 
     def pPerson(self):
         print("{0} {1} {2} {3} {4} {5} {6}".format(
@@ -197,7 +213,7 @@ class Family:
             return False, reasonlist
 
     def parents_not_marry_before_they_dead(self, personObjectList):
-        # story 5
+        # story 05
         marr = self.Married
         marrdate = datetime.datetime.strptime(marr, "%d %b %Y").date()
         reasonlist=[]
@@ -230,7 +246,7 @@ class Family:
             return False, reasonlist
 
     def parents_not_divorce_before_they_dead(self, personObjectList):
-        # story 6
+        # story 06
         reasonlist=[]
         divc = self.Divorced
         if(divc == "NA"):
@@ -338,6 +354,63 @@ class Family:
             return True
         else:
             return False,reasonList
+
+
+    def birth_before_death_of_parents(self, personObjectList):
+        # story 09
+        reasonlist = []
+        if self.Children:
+            for cid in self.Children:
+                for person in personObjectList:
+                    if person.INDI_id == cid:
+                        born = person.BirthDate
+                        borndate = datetime.datetime.strptime(born, "%d %b %Y").date()
+                        # check Husband
+                        for person in personObjectList:
+                            if person.INDI_id == self.HusbandID:
+                                dead = person.DeathDate
+                                if (dead == "NA"):
+                                    break
+                                else:
+                                    borndate_y = datetime.datetime.strptime(born, "%d %b %Y").year
+                                    deathdate_y = datetime.datetime.strptime(dead, "%d %b %Y").year
+                                    borndate_m = datetime.datetime.strptime(born, "%d %b %Y").month
+                                    deathdate_m = datetime.datetime.strptime(dead, "%d %b %Y").month
+
+                                    if (borndate_y - deathdate_y) * 12 + (borndate_m - deathdate_m) > 9:
+                                        reason = "ANOMALY: FAMILY: US09: LINE#: {}: Child {} born {} after 9 month after husband's({}) death on {}"
+                                        reasonlist.append(reason.format(self.ID, cid, born, self.HusbandID, dead))
+                        # check wife
+                        for person in personObjectList:
+                            if person.INDI_id == self.WifeID:
+                                dead = person.DeathDate
+                                if (dead == "NA"):
+                                    break
+                                else:
+                                    deathdate = datetime.datetime.strptime(dead, "%d %b %Y").date()
+                                    if borndate > deathdate:
+                                        reason = "ANOMALY: FAMILY: US09: LINE#: {}: Child {} born {} after wife's({}) death on {}"
+                                        reasonlist.append(reason.format(self.ID, cid, born, self.WifeID, dead))
+        if not reasonlist:
+            return True
+        else:
+            return False, reasonlist
+
+    def unique_family_id(self, family):
+        #story 22-2
+        reasonList=[]
+        family_dict = dict()
+        for fm in family:
+            if fm.ID in family_dict:
+                reason = "ERROR: FAMILY: US22: LINE#: {}: {} is not a unique ID"
+                reasonList.append(reason.format(fm.ID_LINE, fm.ID))
+            else:
+                family_dict[fm.ID] = 1
+        if not reasonList:
+            return True
+        else:
+            return False, reasonList
+
 
     def pfamily(self):
         print("{0} {1} {2} {3} {4} {5}".format(
@@ -552,6 +625,10 @@ def main():
         if story07 != True:
             ErrorList.append(story07[1])
 
+    story22 = person.unique_person_id(PersonObjectList)
+    if story22 != True:
+        ErrorList.append(story22[1])
+
     # stories about familiy
     for fm in family:
         story01_marry = fm.marry_before_current_date()
@@ -560,8 +637,10 @@ def main():
         story05 = fm.parents_not_marry_before_they_dead(PersonObjectList)
         story06 = fm.parents_not_divorce_before_they_dead(PersonObjectList)
         story08 = fm.child_not_birth_before_parents_marriage(PersonObjectList)
+        story09 = fm.birth_before_death_of_parents(PersonObjectList)
         story10 = fm.marriage_after_14(PersonObjectList)
         story25 = fm.unique_first_name_in_family(PersonObjectList)
+
         if story01_marry != True:
             ErrorList.append(story01_marry[1])
         if story01_divorce != True:
@@ -577,12 +656,22 @@ def main():
         if story08 != True:
             for i in range(1, len(story08)):
                 ErrorList.append(story08[i])
+        if story09 != True:
+            for i in range(1, len(story09)):
+                ErrorList.append(story09[i])
+
         if story10 != True:
             for i in range(1,len(story10)):
                 ErrorList.append(story10[i])
         if story25 != True:
             for i in range(1,len(story25)):
                 ErrorList.append(story25[i])
+
+    story22 = fm.unique_family_id(family)
+    if story22 != True:
+        for i in range(1, len(story22)):
+            ErrorList.append(story22[i])
+
     for error in ErrorList:
         if isinstance(error, list):
             for e in error:
