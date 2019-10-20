@@ -379,7 +379,10 @@ class Family:
 
                                     if (borndate_y - deathdate_y) * 12 + (borndate_m - deathdate_m) > 9:
                                         reason = "ANOMALY: FAMILY: US09: {}: {}: Child {} born {} after 9 month after husband's({}) death on {}"
-                                        reasonlist.append(reason.format(self.CHILDREN_LINE[idx], self.ID, cid, born, self.HusbandID, dead))
+                                        if self.CHILDREN_LINE:
+                                            reasonlist.append(reason.format(self.CHILDREN_LINE[idx], self.ID, cid, born, self.HusbandID, dead))
+                                        else:
+                                            reasonlist.append(reason.format(None, self.ID, cid, born, self.HusbandID, dead))
                         # check wife
                         for person in personObjectList:
                             if person.INDI_id == self.WifeID:
@@ -390,7 +393,11 @@ class Family:
                                     deathdate = datetime.datetime.strptime(dead, "%d %b %Y").date()
                                     if borndate > deathdate:
                                         reason = "ANOMALY: FAMILY: US09: {}: {}: Child {} born {} after wife's({}) death on {}"
-                                        reasonlist.append(reason.format(self.CHILDREN_LINE[idx], self.ID, cid, born, self.WifeID, dead))
+                                        if self.CHILDREN_LINE:
+                                            reasonlist.append(reason.format(self.CHILDREN_LINE[idx], self.ID, cid, born, self.WifeID, dead))
+                                        else:
+                                            reasonlist.append(reason.format(None, self.ID, cid, born, self.WifeID, dead))
+
         if not reasonlist:
             return True
         else:
