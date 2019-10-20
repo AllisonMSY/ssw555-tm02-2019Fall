@@ -182,7 +182,7 @@ class Family:
             return False, reasonlist
 
     def parents_not_marry_before_they_dead(self, personObjectList):
-        # story 5
+        # story 05
         marr = self.Married
         marrdate = datetime.datetime.strptime(marr, "%d %b %Y").date()
         reasonlist=[]
@@ -215,7 +215,7 @@ class Family:
             return False, reasonlist
 
     def parents_not_divorce_before_they_dead(self, personObjectList):
-        # story 6
+        # story 06
         reasonlist=[]
         divc = self.Divorced
         if(divc == "NA"):
@@ -309,6 +309,7 @@ class Family:
         else:
             return False,reasonList
 
+
     def birth_before_death_of_parents(self, personObjectList):
         # story 09
         reasonlist = []
@@ -329,6 +330,7 @@ class Family:
                                     deathdate_y = datetime.datetime.strptime(dead, "%d %b %Y").year
                                     borndate_m = datetime.datetime.strptime(born, "%d %b %Y").month
                                     deathdate_m = datetime.datetime.strptime(dead, "%d %b %Y").month
+
                                     if (borndate_y - deathdate_y) * 12 + (borndate_m - deathdate_m) > 9:
                                         reason = "ANOMALY: FAMILY: US09: LINE#: {}: Child {} born {} after 9 month after husband's({}) death on {}"
                                         reasonlist.append(reason.format(self.ID, cid, born, self.HusbandID, dead))
@@ -601,6 +603,7 @@ def main():
         story09 = fm.birth_before_death_of_parents(PersonObjectList)
         story10 = fm.marriage_after_14(PersonObjectList)
         story25 = fm.unique_first_name_in_family(PersonObjectList)
+
         if story01_marry != True:
             ErrorList.append(story01_marry[1])
         if story01_divorce != True:
@@ -619,12 +622,14 @@ def main():
         if story09 != True:
             for i in range(1, len(story09)):
                 ErrorList.append(story09[i])
+
         if story10 != True:
             for i in range(1,len(story10)):
                 ErrorList.append(story10[i])
         if story25 != True:
             for i in range(1,len(story25)):
                 ErrorList.append(story25[i])
+
     for error in ErrorList:
         if isinstance(error, list):
             for e in error:
