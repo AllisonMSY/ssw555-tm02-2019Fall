@@ -143,6 +143,26 @@ class test(unittest.TestCase):
         self.assertTrue(f1.marriage_after_14(personList1))
         self.assertFalse(f2.marriage_after_14(personList2)[0])
 
+    def test_story25(self):
+        f1 = project4.Family("F00")
+        f2 = project4.Family("F01")
+        p1 = project4.Person("I01T")
+        p2 = project4.Person("I02T")
+        p3 = project4.Person("I03T")
+        p4 = project4.Person("I04T")
+        p1.name,p1.gender = "John /ad/", "M"
+        p2.name,p2.gender = "Ali /ad/", "F"
+        p3.name,p3.gender = "Zed /ad/", "F"
+        p4.name,p4.gender = "John /ad/", "M"
+        personList1 = [p1,p2,p3]
+        personList2 = [p1,p2,p4]
+        f1.HusbandID,f1.WifeID = "I01T","I02T"
+        f1.Children.append("I03T")
+        f2.HusbandID,f2.WifeID = "I01T","I02T"
+        f2.Children.append("I04T")
+        self.assertTrue(f1.unique_first_name_in_family(personList1))
+        self.assertFalse(f2.unique_first_name_in_family(personList2)[0])
+
 
 if __name__ == '__main__':
     unittest.main()
