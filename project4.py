@@ -2,6 +2,7 @@ from prettytable import PrettyTable
 from datetime import date
 import datetime
 import readFile
+import collections
 
 fileName = "./testFile/test_project5.txt"
 
@@ -93,8 +94,8 @@ class Person:
             born = datetime.datetime.strptime(self.BirthDate, "%d %b %Y").date()
             if born < death:
                 return True
-            reason = "ERROR: INDIVIDUAL: US03: LINE#: {}: Died {} before born {}"
-            return False, reason.format(self.INDI_id, self.DeathDate,
+            reason = "ERROR: INDIVIDUAL: US03: {}: {}: Died {} before born {}"
+            return False, reason.format(self.ID_LINE, self.INDI_id, self.DeathDate,
                                         self.BirthDate)
         return True
 
@@ -129,6 +130,21 @@ class Person:
             return True
         else:
             return False, reasonList
+
+    def unique_name_and_birth_date(self, personObjectList):
+        # story 23
+        name_birth_dict = collections.defaultdict(int)
+        reason_list = []
+        reason = "ERROR: INDIVIDUAL: US23:{}: Name {}: {} Birth {} are not unique"
+        for person in personObjectList:
+            name_birth_dict[(person.name, person.BirthDate)] += 1
+            if name_birth_dict[(person.name, person.BirthDate)] > 1:
+                reason_list.append(reason.format(
+                    person.ID_LINE, person.name, person.BIRTH_LINE, person.BirthDate))
+        if reason_list:
+            return False, reason_list
+        return True
+
 
     def pPerson(self):
         print("{0} {1} {2} {3} {4} {5} {6}".format(
@@ -211,7 +227,7 @@ class Family:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
                     if marrdate >= deathDate:
 
-                        reason = "ANOMALY: FAMILY: US05: LINE#: {}: Married {} after husband's({}) death on {}"
+                        reason = "ANOMALY: FAMILY: US05: {}: Married {} after husband's({}) death on {}"
                         reasonlist.append(reason.format(self.MARRAY_LINE, marr, self.HusbandID, dead ))
         # check wife
         for person in personObjectList:
@@ -245,7 +261,7 @@ class Family:
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
                     if divcdate >= deathDate:
-                        reason = "ANOMALY: FAMILY: US06: LINE#: {}: Divorce {} after husband's({}) death on {}"
+                        reason = "ANOMALY: FAMILY: US06: {}: Divorce {} after husband's({}) death on {}"
                         reasonlist.append(reason.format(self.DIVORCED_LINE, divc, self.HusbandID, dead ))
         # check wife
         for person in personObjectList:
@@ -274,8 +290,8 @@ class Family:
                                                  "%d %b %Y").date()
             if marry < divorce:
                 return True
-            reason = "ERROR: INDIVIDUAL: US04: LINE#: {}: Divorced {} before married {}"
-            return False, reason.format(self.ID, self.Divorced,
+            reason = "ERROR: INDIVIDUAL: US04: {}: {}: Divorced {} before married {}"
+            return False, reason.format(self.ID_LINE, self.ID, self.Divorced,
                                         self.Married)
         return True
 
@@ -296,6 +312,21 @@ class Family:
             return True
         else:
             return False,reasonList
+
+    def unique_families_by_spouses(self, family):
+        # story 24
+        spouse_marry_dict = collections.defaultdict(int)
+        reason_list = []
+        reason = "ERROR: INDIVIDUAL: US24:{}: Husband {} Wife {}: Married {} are not unique"
+        for f in family:
+            spouse_marry_dict[(f.HusbandName, f.WifeName, f.Married)] += 1
+            if spouse_marry_dict[(f.HusbandName, f.WifeName, f.Married)] > 1:
+                reason_list.append(reason.format(
+                    f.ID_LINE, f.HusbandName, f.WifeName, f.Married))
+        if reason_list:
+            return False, reason_list
+        return True
+
 
     def unique_first_name_in_family(self,personObjectList):
         #story 25
@@ -424,9 +455,9 @@ def main():
         else:
             if onePerson:
                 onePerson.append(oneline)
-    
+
     if onePerson: ## append last person
-        personLineList.append(onePerson) 
+        personLineList.append(onePerson)
 
     # create object
     PersonObjectList = []
@@ -464,7 +495,7 @@ def main():
                         BIRTH_LINE = oneline[3]
                     if DeathDate == "temp":
                         DeathDate = oneline[2]
-                        DEATH_LINE = oneline[3]                        
+                        DEATH_LINE = oneline[3]
         onePerson = Person(INDI_id)
         onePerson.name, onePerson.gender, onePerson.BirthDate, onePerson.DeathDate = name, gender, BirthDate, DeathDate
         onePerson.FID_child, onePerson.FID_spouse = FID_child, FID_spouse
