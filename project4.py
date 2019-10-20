@@ -94,8 +94,8 @@ class Person:
             born = datetime.datetime.strptime(self.BirthDate, "%d %b %Y").date()
             if born < death:
                 return True
-            reason = "ERROR: INDIVIDUAL: US03: LINE#: {}: Died {} before born {}"
-            return False, reason.format(self.INDI_id, self.DeathDate,
+            reason = "ERROR: INDIVIDUAL: US03: {}: {}: Died {} before born {}"
+            return False, reason.format(self.ID_LINE, self.INDI_id, self.DeathDate,
                                         self.BirthDate)
         return True
 
@@ -211,7 +211,7 @@ class Family:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
                     if marrdate >= deathDate:
 
-                        reason = "ANOMALY: FAMILY: US05: LINE#: {}: Married {} after husband's({}) death on {}"
+                        reason = "ANOMALY: FAMILY: US05: {}: Married {} after husband's({}) death on {}"
                         reasonlist.append(reason.format(self.MARRAY_LINE, marr, self.HusbandID, dead ))
         # check wife
         for person in personObjectList:
@@ -245,7 +245,7 @@ class Family:
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
                     if divcdate >= deathDate:
-                        reason = "ANOMALY: FAMILY: US06: LINE#: {}: Divorce {} after husband's({}) death on {}"
+                        reason = "ANOMALY: FAMILY: US06: {}: Divorce {} after husband's({}) death on {}"
                         reasonlist.append(reason.format(self.DIVORCED_LINE, divc, self.HusbandID, dead ))
         # check wife
         for person in personObjectList:
@@ -274,8 +274,8 @@ class Family:
                                                  "%d %b %Y").date()
             if marry < divorce:
                 return True
-            reason = "ERROR: INDIVIDUAL: US04: LINE#: {}: Divorced {} before married {}"
-            return False, reason.format(self.ID, self.Divorced,
+            reason = "ERROR: INDIVIDUAL: US04: {}: {}: Divorced {} before married {}"
+            return False, reason.format(self.ID_LINE, self.ID, self.Divorced,
                                         self.Married)
         return True
 
