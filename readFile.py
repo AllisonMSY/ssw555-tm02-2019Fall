@@ -7,6 +7,7 @@ _TAGLIST2 = ['DATE']
 def readGCFile(fileName):
     readFile = open(fileName, 'r')
     allContents = readFile.read().splitlines()
+    readFile.close()
 
     allContents = [one for one in allContents]
     # eachLine = [<level>, <tag>, <arguments>]
