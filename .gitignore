@@ -4,3 +4,7 @@ __pycache__/
 .~lock.Team02Report.xlsx#
 .idea/
 *pyc
+.DS_Store
+project.pyc
+readFile.pyc
+test.pyc
