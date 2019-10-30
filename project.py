@@ -1,8 +1,10 @@
 from prettytable import PrettyTable
 from datetime import date
 import datetime
-import readFile
 import collections
+# custom py
+import readFile
+import printPrettyTable
 
 fileName = "./testFile/test_project6.txt"
 
@@ -559,58 +561,12 @@ def main():
     PersonObjectList.sort(key=lambda x: x.INDI_id)
     family.sort(key=lambda x: x.ID)
 
-    personTable = PrettyTable()
-    personTable.field_names = ["ID", "Name", "Gender", "Birthday",
-                               "Age", "Alive", "Death", "Child", "Spouse"]
-
     # Print
-
     # print person
-    for one in PersonObjectList:
-        child = "NA"
-        spouse = "NA"
-        death = "NA"
-        alive = "Y"
-        born = datetime.datetime.strptime(one.BirthDate, "%d %b %Y").date()
-        today = date.today()
-        age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-
-        if one.FID_child:
-            child = one.FID_child
-        if one.FID_spouse:
-            spouse = one.FID_spouse
-        if one.DeathDate != "NA":
-            alive = "N"
-            death = one.DeathDate
-            today = datetime.datetime.strptime(one.DeathDate, "%d %b %Y").date()
-            age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-
-        personTable.add_row([one.INDI_id, one.name, one.gender,
-                             one.BirthDate, age, alive, death, child, spouse])
-
-    print(personTable)
-
+    printPrettyTable.printPeoplePrettyTable(PersonObjectList)
+    
     # print family
-    familyTable = PrettyTable()
-    familyTable.field_names = ["ID", "Married", "Divorced", "Husband ID",
-                               "Husband Name", "Wife ID", "Wife Name",
-                               "Children"]
-    for one in family:
-        Children = "NA"
-        if one.Children:
-            Children = one.Children
-        for oneP in PersonObjectList:
-            if oneP.INDI_id == one.HusbandID:
-                one.HusbandName = oneP.name
-            if oneP.INDI_id == one.WifeID:
-                one.WifeName = oneP.name
-
-        familyTable.add_row(
-            [one.ID, one.Married, one.Divorced, one.HusbandID, one.HusbandName,
-             one.WifeID, one.WifeName, Children])
-
-    print(familyTable)
-
+    printPrettyTable.printFamilyPrettyTable(family,PersonObjectList)
 
     # The new add of main in project 3
     ErrorList = []
