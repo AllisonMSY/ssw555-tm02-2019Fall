@@ -1,13 +1,16 @@
 import unittest
 import project
 import readFile
+from datetime import date
+
 
 class test(unittest.TestCase):
 
     def test_readFile(self):
         fileName = "./testFile/travis_test.txt"
         res = readFile.readGCFile(fileName)
-        expectResult = [[0, 'INDI', 'I00', 4], [1, 'NAME', 'Ulises /Bubb/', 5], [1, 'SEX', 'M', 6], [1, 'BIRT', '', 8], [2, 'DATE', '2 SEP 1941', 9], [1, 'DEAT', '', 10], [2, 'DATE', '21 DEC 1973', 11], [1, 'FAMS', 'F00', 12], [0, 'FAM', 'F00', 16], [1, 'MARR', '', 17], [2, 'DATE', '14 FEB 1966', 18], [1, 'HUSB', 'I00', 19], [1, 'WIFE', 'I01', 20], [1, 'CHIL', 'I04', 21], [1, 'CHIL', 'I05', 22], [1, 'CHIL', 'I06', 23]]
+        expectResult = [[0, 'INDI', 'I00', 4], [1, 'NAME', 'Ulises /Bubb/', 5], [1, 'SEX', 'M', 6], [1, 'BIRT', '', 8], [2, 'DATE', '2 SEP 1941', 9], [1, 'DEAT', '', 10], [2, 'DATE', '21 DEC 1973', 11], [1, 'FAMS',
+                                                                                                                                                                                                            'F00', 12], [0, 'FAM', 'F00', 16], [1, 'MARR', '', 17], [2, 'DATE', '14 FEB 1966', 18], [1, 'HUSB', 'I00', 19], [1, 'WIFE', 'I01', 20], [1, 'CHIL', 'I04', 21], [1, 'CHIL', 'I05', 22], [1, 'CHIL', 'I06', 23]]
         self.assertEqual(res, expectResult)
 
     def test_story01(self):
@@ -52,7 +55,7 @@ class test(unittest.TestCase):
 
     def test_story03(self):
         p = project.Person("I03T")
-        p.name, p.gender, p.BirthDate, p.DeathDate = "P03", "F", "4 MAR 2000","4 MAR 2010"
+        p.name, p.gender, p.BirthDate, p.DeathDate = "P03", "F", "4 MAR 2000", "4 MAR 2010"
         self.assertEqual(p.birth_before_death(), True)
         p = project.Person("I03T")
         p.name, p.gender, p.BirthDate, p.DeathDate = "P03", "F", "4 MAR 2010", "4 MAR 2000"
@@ -94,7 +97,8 @@ class test(unittest.TestCase):
         f1 = project.Family("F01T")
         f1.Married, f1.Divorced, f1.HusbandID, f1.WifeID = "21 DEC 1973", "21 DEC 1973", "I01T", "I02T"
 
-        self.assertFalse(f1.parents_not_divorce_before_they_dead(personList)[0])
+        self.assertFalse(
+            f1.parents_not_divorce_before_they_dead(personList)[0])
 
         f2 = project.Family("F02T")
         f2.Married, f2.Divorced, f2.HusbandID, f2.WifeID = "21 DEC 1966", "21 DEC 1969", "I01T", "I02T"
@@ -103,18 +107,18 @@ class test(unittest.TestCase):
 
     def test_story07(self):
         p1 = project.Person("I01")
-        p1.name, p1.gender, p1.BirthDate, p1.DeathDate = "adasi","F","21 DEC 1773","21 DEC 1973"
+        p1.name, p1.gender, p1.BirthDate, p1.DeathDate = "adasi", "F", "21 DEC 1773", "21 DEC 1973"
         p2 = project.Person("I02")
-        p2.name, p2.gender, p2.BirthDate = "adasi","F","21 DEC 1973"
+        p2.name, p2.gender, p2.BirthDate = "adasi", "F", "21 DEC 1973"
         self.assertTrue(p2.less_than_150())
         self.assertFalse(p1.less_than_150()[0])
 
     def test_story08(self):
         p1 = project.Person("I01")
-        p1.name, p1.gender, p1.BirthDate = "adasasfa","F","21 DEC 1993"
+        p1.name, p1.gender, p1.BirthDate = "adasasfa", "F", "21 DEC 1993"
 
         p2 = project.Person("I02")
-        p2.name, p2.gender, p2.BirthDate = "faasda","F","21 DEC 1973"
+        p2.name, p2.gender, p2.BirthDate = "faasda", "F", "21 DEC 1973"
 
         personObj1 = []
         personObj1.append(p1)
@@ -125,7 +129,8 @@ class test(unittest.TestCase):
         f1.Children.append("I01")
         f1.Children.append("I02")
         self.assertTrue(f1.child_not_birth_before_parents_marriage(personObj1))
-        self.assertFalse(f1.child_not_birth_before_parents_marriage(personObj2)[0])
+        self.assertFalse(
+            f1.child_not_birth_before_parents_marriage(personObj2)[0])
 
     def test_story09(self):
         p1 = project.Person("I01")
@@ -153,20 +158,19 @@ class test(unittest.TestCase):
         self.assertFalse(f1.birth_before_death_of_parents(personList1)[0])
         self.assertTrue(f2.birth_before_death_of_parents(personList2))
 
-
     def test_story10(self):
         p1 = project.Person("I01T")
         p2 = project.Person("I02T")
         p3 = project.Person("I03T")
-        p1.name,p1.gender,p1.BirthDate = "adasd","M","21 DEC 1973"
-        p2.name,p2.gender,p2.BirthDate = "dacadaw", "M","21 SEP 1993"
-        p3.name,p3.gender,p3.BirthDate = "badacaaq","F","21 DEC 1983"
-        personList1=[p1,p3]
-        personList2=[p2,p3]
+        p1.name, p1.gender, p1.BirthDate = "adasd", "M", "21 DEC 1973"
+        p2.name, p2.gender, p2.BirthDate = "dacadaw", "M", "21 SEP 1993"
+        p3.name, p3.gender, p3.BirthDate = "badacaaq", "F", "21 DEC 1983"
+        personList1 = [p1, p3]
+        personList2 = [p2, p3]
         f1 = project.Family("F00T")
         f2 = project.Family("F01T")
-        f1.Married,f1.HusbandID,f1.WifeID = "21 NOV 2000","I01T","I03T"
-        f2.Married,f2.HusbandID,f2.WifeID = "21 DEC 2000","I02T","I03T"
+        f1.Married, f1.HusbandID, f1.WifeID = "21 NOV 2000", "I01T", "I03T"
+        f2.Married, f2.HusbandID, f2.WifeID = "21 DEC 2000", "I02T", "I03T"
         self.assertTrue(f1.marriage_after_14(personList1))
         self.assertFalse(f2.marriage_after_14(personList2)[0])
 
@@ -208,7 +212,7 @@ class test(unittest.TestCase):
         family1, family2 = [f1, f2], [f2, f3]
         self.assertTrue(f1.unique_families_by_spouses(family1))
         self.assertFalse(f1.unique_families_by_spouses(family2)[0])
-        
+
     def test_story25(self):
         f1 = project.Family("F00")
         f2 = project.Family("F01")
@@ -216,18 +220,24 @@ class test(unittest.TestCase):
         p2 = project.Person("I02T")
         p3 = project.Person("I03T")
         p4 = project.Person("I04T")
-        p1.name,p1.gender = "John /ad/", "M"
-        p2.name,p2.gender = "Ali /ad/", "F"
-        p3.name,p3.gender = "Zed /ad/", "F"
-        p4.name,p4.gender = "John /ad/", "M"
-        personList1 = [p1,p2,p3]
-        personList2 = [p1,p2,p4]
-        f1.HusbandID,f1.WifeID = "I01T","I02T"
+        p1.name, p1.gender = "John /ad/", "M"
+        p2.name, p2.gender = "Ali /ad/", "F"
+        p3.name, p3.gender = "Zed /ad/", "F"
+        p4.name, p4.gender = "John /ad/", "M"
+        personList1 = [p1, p2, p3]
+        personList2 = [p1, p2, p4]
+        f1.HusbandID, f1.WifeID = "I01T", "I02T"
         f1.Children.append("I03T")
-        f2.HusbandID,f2.WifeID = "I01T","I02T"
+        f2.HusbandID, f2.WifeID = "I01T", "I02T"
         f2.Children.append("I04T")
         self.assertTrue(f1.unique_first_name_in_family(personList1))
         self.assertFalse(f2.unique_first_name_in_family(personList2)[0])
+
+    def test_story38(self):
+        pass
+
+    def test_story39(self):
+        pass
 
 
 if __name__ == '__main__':

@@ -50,6 +50,27 @@ class Person:
         self.DEATH_LINE = "NA"
         self.FAMC_LINE = []
         self.FAMS_LINE = []
+    
+    @staticmethod
+    def list_upcoming_birthdays(personList):
+        upcoming_birthdays_person_list = []
+        for one in personList:
+            if one.DeathDate == "NA":
+                birthday = datetime.datetime.strptime(one.BirthDate, "%d %b %Y").date()
+                today = date.today()
+                thisYearBirthday = birthday.replace(year=today.year)
+                nextYearBirthday = birthday.replace(year=today.year+1)
+                if 0 <= (thisYearBirthday - today).days <= 30 :
+                    upcoming_birthdays_person_list.append(one)
+                if (nextYearBirthday - today).days <= 30 :
+                    upcoming_birthdays_person_list.append(one)
+        print("===== UPCOMING BIRTHDAY =====")
+        if upcoming_birthdays_person_list:
+            printPrettyTable.printPeoplePrettyTable(upcoming_birthdays_person_list)
+        else:
+            print(" NULL ")
+        print("=============================")
+        return upcoming_birthdays_person_list
 
     def get_first_name(self):
         return self.name.split(' ')[0]
@@ -147,7 +168,6 @@ class Person:
             return False, reason_list
         return True
 
-
     def pPerson(self):
         print("{0} {1} {2} {3} {4} {5} {6}".format(
             self.INDI_id, self.name, self.gender,
@@ -172,6 +192,32 @@ class Family:
         self.HUSBAND_LINE = "NA"
         self.WIFE_LINE = "NA"
         self.CHILDREN_LINE = []
+
+    @staticmethod
+    def list_upcoming_anniversaries(familyList, personList):
+        upcoming_anniversaries_family_list = []
+        for oneFamily in familyList:
+            if oneFamily.Divorced == "NA": # not divorced
+                for onePerson in personList:
+                    if onePerson.INDI_id == oneFamily.HusbandID or onePerson.INDI_id == oneFamily.WifeID:
+                        if onePerson.DeathDate != 'NA':
+                            break
+                else: # couple not dead
+                    anniversary = datetime.datetime.strptime(oneFamily.Married, "%d %b %Y").date()
+                    today = date.today()
+                    thisYearAnniversary = anniversary.replace(year=today.year)
+                    nextYearAnniversary = anniversary.replace(year=today.year+1)
+                    if 0 <= (thisYearAnniversary - today).days <= 30 :
+                        upcoming_anniversaries_family_list.append(oneFamily)
+                    if (nextYearAnniversary - today).days <= 30:
+                        upcoming_anniversaries_family_list.append(oneFamily)
+                
+        print("===== UPCOMING ANNIVERSARY =====")
+        if upcoming_anniversaries_family_list:
+            printPrettyTable.printFamilyPrettyTable(upcoming_anniversaries_family_list,personList)
+        else:
+            print("NULL")
+        print("================================")
 
     def marry_before_current_date(self):
         # Story 01 Marry
@@ -204,8 +250,8 @@ class Family:
                         born = person.BirthDate
                         marr = self.Married
                         borndate = datetime.datetime.strptime(born, "%d %b %Y").date()
-                        marrdate = datetime.datetime.strptime(marr, "%d %b %Y").date()
-                        if marrdate > borndate:
+                        marryDate = datetime.datetime.strptime(marr, "%d %b %Y").date()
+                        if marryDate > borndate:
                             reason = "ANOMALY: FAMILY: US08:{}: {}: Child {} born {} before marriage on {}"
                             reasonlist.append(reason.format(self.MARRAY_LINE, self.ID, cid,
                                                             born, marr))
@@ -217,7 +263,7 @@ class Family:
     def parents_not_marry_before_they_dead(self, personObjectList):
         # story 05
         marr = self.Married
-        marrdate = datetime.datetime.strptime(marr, "%d %b %Y").date()
+        marryDate = datetime.datetime.strptime(marr, "%d %b %Y").date()
         reasonlist=[]
         # check Husband
         for person in personObjectList:
@@ -227,7 +273,7 @@ class Family:
                     break
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
-                    if marrdate >= deathDate:
+                    if marryDate >= deathDate:
 
                         reason = "ANOMALY: FAMILY: US05: {}: Married {} after husband's({}) death on {}"
                         reasonlist.append(reason.format(self.MARRAY_LINE, marr, self.HusbandID, dead ))
@@ -239,7 +285,7 @@ class Family:
                     break
                 else:
                     deathDate = datetime.datetime.strptime(dead, "%d %b %Y").date()
-                    if marrdate >= deathDate:
+                    if marryDate >= deathDate:
                         reason = "ANOMALY: FAMILY: US05: {}: Married {} after wife's({}) death on {}"
                         reasonlist.append(reason.format(self.MARRAY_LINE, marr , self.WifeID, dead ))
         if not reasonlist:
@@ -329,7 +375,6 @@ class Family:
             return False, reason_list
         return True
 
-
     def unique_first_name_in_family(self,personObjectList):
         #story 25
         reasonList=[]
@@ -356,7 +401,6 @@ class Family:
             return True
         else:
             return False,reasonList
-
 
     def birth_before_death_of_parents(self, personObjectList):
         # story 09
@@ -419,7 +463,6 @@ class Family:
             return True
         else:
             return False, reasonList
-
 
     def pfamily(self):
         print("{0} {1} {2} {3} {4} {5}".format(
@@ -557,7 +600,7 @@ def main():
     # for one in family:
     #     one.pfamily()
 
-    # Sort
+    # Sort all people and family by id
     PersonObjectList.sort(key=lambda x: x.INDI_id)
     family.sort(key=lambda x: x.ID)
 
@@ -596,7 +639,7 @@ def main():
     if story23 != True:
         ErrorList.append(story23[1])
 
-    # stories about familiy
+    # stories about family
     for fm in family:
         story01_marry = fm.marry_before_current_date()
         story01_divorce = fm.divorce_before_current_date()
@@ -651,6 +694,8 @@ def main():
         else:
             print(error)
 
+    Person.list_upcoming_birthdays(PersonObjectList)
+    Family.list_upcoming_anniversaries(family, PersonObjectList)
 
 if __name__ == '__main__':
     main()
