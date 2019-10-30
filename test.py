@@ -234,10 +234,52 @@ class test(unittest.TestCase):
         self.assertFalse(f2.unique_first_name_in_family(personList2)[0])
 
     def test_story38(self):
-        pass
+        p1 = project.Person("I01T")
+        p2 = project.Person("I02T")
+        p3 = project.Person("I03T")
+        p4 = project.Person("I04T")
+        # birthday is in the middle of a year
+        p1.name, p1.BirthDate = "Alice", "21 JUL 1973"
+        # birthday is at the beginning of a year
+        p2.name, p2.BirthDate = "Bob", "21 JAN 1993"
+        # birthday is at the beginning of a year but already dead
+        p3.name, p3.BirthDate, p3.DeathDate = "Sue", "12 JAN 1993", "15 JUL 2017"
+        # birthday is in the middle of a year but already dead
+        p4.name, p4.BirthDate, p4.DeathDate = "Alex", "12 JAN 1992", "15 JUL 2016"
+        personList = [p1, p2, p3, p4]
+        today1 = date(2019, 12, 31)  # this last day of a year.
+        today2 = date(2019, 6, 30)  # this last day of a year.
+        self.assertEqual(
+            [p2], project.Person.list_upcoming_birthdays_from_date(personList, today1))
+        self.assertEqual(
+            [p1], project.Person.list_upcoming_birthdays_from_date(personList, today2))
 
     def test_story39(self):
-        pass
+        p1 = project.Person("I01T")
+        p2 = project.Person("I02T")
+        p3 = project.Person("I03T")
+        p4 = project.Person("I04T")
+        # birthday is in the middle of a year
+        p1.name, p1.BirthDate = "Alice", "21 JUL 1973"
+        # birthday is at the beginning of a year
+        p2.name, p2.BirthDate = "Bob", "21 JAN 1993"
+        # birthday is at the beginning of a year but already dead
+        p3.name, p3.BirthDate, p3.DeathDate = "Sue", "12 JAN 1993", "15 JUL 2017"
+        # birthday is in the middle of a year but already dead
+        p4.name, p4.BirthDate, p4.DeathDate = "Alex", "12 JAN 1992", "15 JUL 2016"
+        f1 = project.Family("F00T")
+        f2 = project.Family("F01T")
+        f3 = project.Family("F02T")
+
+        f1.HusbandID, f1.WifeID, f1.Married = "I01T", "I02T", "12 JAN 2015"
+        f2.HusbandID, f2.WifeID, f2.Married, f2.Divorced = "I01T", "I02T", "12 JAN 2015", "12 MAR 2017"  # divorced
+        f3.HusbandID, f3.WifeID, f3.Married = "I03T", "I04T", "12 JAN 2015"  # both dead
+        today = date(2019, 12, 31)
+        personList = [p1, p2, p3, p4]
+        familyList = [f1, f2, f3]
+
+        self.assertEqual([f1], project.Family.list_upcoming_anniversaries_from_date(
+            familyList, personList, today))
 
 
 if __name__ == '__main__':

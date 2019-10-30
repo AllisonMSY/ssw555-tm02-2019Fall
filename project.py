@@ -52,12 +52,12 @@ class Person:
         self.FAMS_LINE = []
     
     @staticmethod
-    def list_upcoming_birthdays(personList):
+    def list_upcoming_birthdays_from_date(personList, today):
         upcoming_birthdays_person_list = []
         for one in personList:
             if one.DeathDate == "NA":
                 birthday = datetime.datetime.strptime(one.BirthDate, "%d %b %Y").date()
-                today = date.today()
+                # today = date.today()
                 thisYearBirthday = birthday.replace(year=today.year)
                 nextYearBirthday = birthday.replace(year=today.year+1)
                 if 0 <= (thisYearBirthday - today).days <= 30 :
@@ -194,7 +194,7 @@ class Family:
         self.CHILDREN_LINE = []
 
     @staticmethod
-    def list_upcoming_anniversaries(familyList, personList):
+    def list_upcoming_anniversaries_from_date(familyList, personList, today):
         upcoming_anniversaries_family_list = []
         for oneFamily in familyList:
             if oneFamily.Divorced == "NA": # not divorced
@@ -204,7 +204,7 @@ class Family:
                             break
                 else: # couple not dead
                     anniversary = datetime.datetime.strptime(oneFamily.Married, "%d %b %Y").date()
-                    today = date.today()
+                    # today = date.today()
                     thisYearAnniversary = anniversary.replace(year=today.year)
                     nextYearAnniversary = anniversary.replace(year=today.year+1)
                     if 0 <= (thisYearAnniversary - today).days <= 30 :
@@ -218,6 +218,7 @@ class Family:
         else:
             print("NULL")
         print("================================")
+        return upcoming_anniversaries_family_list
 
     def marry_before_current_date(self):
         # Story 01 Marry
@@ -694,8 +695,9 @@ def main():
         else:
             print(error)
 
-    Person.list_upcoming_birthdays(PersonObjectList)
-    Family.list_upcoming_anniversaries(family, PersonObjectList)
+    # Print upcoming list
+    Person.list_upcoming_birthdays_from_date(PersonObjectList, date.today())
+    Family.list_upcoming_anniversaries_from_date(family, PersonObjectList, date.today())
 
 if __name__ == '__main__':
     main()
