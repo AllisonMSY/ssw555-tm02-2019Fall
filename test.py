@@ -233,6 +233,38 @@ class test(unittest.TestCase):
         self.assertTrue(f1.unique_first_name_in_family(personList1))
         self.assertFalse(f2.unique_first_name_in_family(personList2)[0])
 
+    def test_stor30(self):
+        p1 = project.Person("I01T")
+        p2 = project.Person("I02T")
+        p3 = project.Person("I03T")
+        p4 = project.Person("I04T")
+        p5 = project.Person("I04T")
+        p1.name,p1.BirthDate,p1.FID_spouse = "A", "21 JUL 1973", ["I02T"]
+        p2.name,p2.BirthDate,p2.FID_spouse = "B", "21 JUL 1983", ["I01T"]
+        p3.name,p3.BirthDate = "C", "21 JUL 1983",
+        p4.name,p4.BirthDate,p4.FID_spouse = "D", "21 JUL 1993",["I05T"]
+        p5.name,p5.BirthDate,p5.DeathDate,p5.name = "E","21 JUL 1993","21 JUL 2003",["I04T"]
+        personList1 = [p1,p2,p3,p4,p5]
+        personList2 = [p1,p2,p3]
+        self.assertEqual(project.Person.list_living_married(personList1),[p1,p2,p4])
+        self.assertEqual(project.Person.list_living_married(personList2),[p1,p2])
+
+    def test_story31(self):
+        p1 = project.Person("I01T")
+        p2 = project.Person("I02T")
+        p3 = project.Person("I03T")
+        p4 = project.Person("I04T")
+        p5 = project.Person("I04T")
+        p1.name,p1.BirthDate = "A", "21 JUL 1973"
+        p2.name,p2.BirthDate = "B", "21 JUL 1983"
+        p3.name,p3.BirthDate,p3.DeathDate = "C", "21 JUL 1983", "21 JUL 2013"
+        p4.name,p4.BirthDate,p4.FID_spouse = "D", "21 JUL 1983",["I05T"]
+        p5.name,p5.BirthDate,p5.DeathDate,p5.name = "E","21 JUL 1983","21 JUL 2003",["I04T"]
+        personList1 = [p1,p2,p3,p4,p5]
+        personList2 = [p2,p3,p4,p5]
+        self.assertEqual(project.Person.list_living_single(personList1),[p1,p2])
+        self.assertEqual(project.Person.list_living_single(personList2),[p2])
+
     def test_story38(self):
         p1 = project.Person("I01T")
         p2 = project.Person("I02T")
