@@ -53,6 +53,7 @@ class Person:
     
     @staticmethod
     def list_upcoming_birthdays_from_date(personList, today):
+        # story 38
         upcoming_birthdays_person_list = []
         for one in personList:
             if one.DeathDate == "NA":
@@ -195,6 +196,7 @@ class Family:
 
     @staticmethod
     def list_upcoming_anniversaries_from_date(familyList, personList, today):
+        # story 39
         upcoming_anniversaries_family_list = []
         for oneFamily in familyList:
             if oneFamily.Divorced == "NA": # not divorced
