@@ -73,6 +73,38 @@ class Person:
         print("=============================")
         return upcoming_birthdays_person_list
 
+    @staticmethod
+    def list_living_married(personList):
+        #story 30
+        living_married = []
+        for person in personList:
+            if len(person.FID_spouse)>0 and person.DeathDate == 'NA':
+                living_married.append(person)
+        print("===== LIVING MARRIED PEOPLE =====")
+        if living_married:
+            printPrettyTable.printPeoplePrettyTable(living_married)
+        else:
+            print(" NULL ")
+        print("=============================")
+        return living_married
+
+    @staticmethod
+    def list_living_single(personList):
+        #story 31 list living single over 30 years old
+        living_single = []
+        for person in personList:
+            if len(person.FID_spouse)==0 and person.DeathDate == 'NA' and get_age(person)>30:
+                living_single.append(person)
+        print("===== LIVING SINGLE PEOPLE OVER 30 =====")
+        if living_single:
+            printPrettyTable.printPeoplePrettyTable(living_single)
+        else:
+            print(" NULL ")
+        print("=============================")
+        return living_single
+
+
+
     def get_first_name(self):
         return self.name.split(' ')[0]
 
@@ -467,6 +499,7 @@ class Family:
         else:
             return False, reasonList
 
+
     def pfamily(self):
         print("{0} {1} {2} {3} {4} {5}".format(
             self.ID, self.Married, self.Divorced,
@@ -700,6 +733,8 @@ def main():
     # Print upcoming list
     Person.list_upcoming_birthdays_from_date(PersonObjectList, date.today())
     Family.list_upcoming_anniversaries_from_date(family, PersonObjectList, date.today())
+    Person.list_living_married(PersonObjectList)
+    Person.list_living_single(PersonObjectList)
 
 if __name__ == '__main__':
     main()
