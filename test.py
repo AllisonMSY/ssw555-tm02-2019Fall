@@ -293,6 +293,22 @@ class test(unittest.TestCase):
         self.assertEqual(project.Person.list_living_single(personList1),[p1,p2])
         self.assertEqual(project.Person.list_living_single(personList2),[p2])
 
+    def test_story35(self):
+        p1 = project.Person("I01T")
+        p2 = project.Person("I02T")
+        p3 = project.Person("I03T")
+        p1.name, p1.BirthDate = "A", "31 Oct 2019"
+        p2.name, p2.BirthDate = "B", "21 JUL 1983"
+        self.assertEqual(project.Person.list_recent_birth([p1, p2, p3], date(2019, 11, 2)), [p1])
+
+    def test_story36(self):
+        p1 = project.Person("I01T")
+        p2 = project.Person("I02T")
+        p3 = project.Person("I03T")
+        p1.name, p1.DeathDate, p1.BirthDate = "A", "31 Oct 2019", "31 Oct 2000"
+        p2.name, p2.DeathDate, p2.BirthDate = "B", "21 JUL 1983", "21 JUL 1940"
+        self.assertEqual(project.Person.list_recent_death([p1, p2, p3], date(2019, 11, 2)), [p1])
+
     def test_story38(self):
         p1 = project.Person("I01T")
         p2 = project.Person("I02T")
