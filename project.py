@@ -50,7 +50,7 @@ class Person:
         self.DEATH_LINE = "NA"
         self.FAMC_LINE = []
         self.FAMS_LINE = []
-    
+
     @staticmethod
     def list_upcoming_birthdays_from_date(personList, today):
         # story 38
@@ -103,7 +103,39 @@ class Person:
         print("=============================")
         return living_single
 
+    @staticmethod
+    def list_recent_birth(personList, today):
+        # story 35: list recent birth in last 30 days
+        recent_birth = []
+        for person in personList:
+            if person.BirthDate and person.BirthDate != 'NA':
+                birth = datetime.datetime.strptime(person.BirthDate, "%d %b %Y").date()
+                if 0 <= (today - birth).days <= 30 :
+                    recent_birth.append(person)
+        print("===== RECENT BIRTH =====")
+        if recent_birth:
+            printPrettyTable.printPeoplePrettyTable(recent_birth)
+        else:
+            print(" NULL ")
+        print("=============================")
+        return recent_birth
 
+    @staticmethod
+    def list_recent_death(personList, today):
+        # story 36: list recent death in last 30 days
+        recent_death = []
+        for person in personList:
+            if person.DeathDate and person.DeathDate != "NA":
+                death = datetime.datetime.strptime(person.DeathDate, "%d %b %Y").date()
+                if 0 <= (today - death).days <= 30 :
+                    recent_death.append(person)
+        print("===== RECENT DEATH =====")
+        if recent_death:
+            printPrettyTable.printPeoplePrettyTable(recent_death)
+        else:
+            print(" NULL ")
+        print("=============================")
+        return recent_death
 
     def get_first_name(self):
         return self.name.split(' ')[0]
@@ -245,7 +277,7 @@ class Family:
                         upcoming_anniversaries_family_list.append(oneFamily)
                     if (nextYearAnniversary - today).days <= 30:
                         upcoming_anniversaries_family_list.append(oneFamily)
-                
+
         print("===== UPCOMING ANNIVERSARY =====")
         if upcoming_anniversaries_family_list:
             printPrettyTable.printFamilyPrettyTable(upcoming_anniversaries_family_list,personList)
@@ -679,7 +711,7 @@ def main():
     # Print
     # print person
     printPrettyTable.printPeoplePrettyTable(PersonObjectList)
-    
+
     # print family
     printPrettyTable.printFamilyPrettyTable(family,PersonObjectList)
 
@@ -775,6 +807,8 @@ def main():
 
     # Print upcoming list
     Person.list_upcoming_birthdays_from_date(PersonObjectList, date.today())
+    Person.list_recent_birth(PersonObjectList, date.today())
+    Person.list_recent_death(PersonObjectList, date.today())
     Family.list_upcoming_anniversaries_from_date(family, PersonObjectList, date.today())
     Person.list_living_married(PersonObjectList)
     Person.list_living_single(PersonObjectList)
