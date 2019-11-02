@@ -272,6 +272,42 @@ class Family:
         reason = "ERROR: FAMILY: US01: {}: {}: Divorced date {} occurs in the future"
         return False, reason.format(self.ID_LINE, self.ID, self.Divorced)
 
+    def fewer_than_15_siblings(self):
+        #Story 15
+        child = self.Children
+        c = len(child)
+        if c < 15:
+            return True
+        reason = "ANOMALY: FAMILY: US15: {}: Family {} has more than 15 siblings"
+        return False, reason.format(self.ID_LINE, self.ID)
+
+    def correct_gender_for_role(self, personObjectList):
+        #Story 21
+        reasonlist = []
+        # check Husband
+        for person in personObjectList:
+            if person.INDI_id == self.HusbandID:
+                if person.gender == 'M':
+                    break
+                if person.gender == 'F':
+                    reason = "ERROR: FAMILY: US21: {}: Husband's({}) gender is wrong"
+                    reasonlist.append(reason.format(person.GENDER_LINE, self.HusbandID))
+        # check Wife
+        for person in personObjectList:
+            if person.INDI_id == self.WifeID:
+                if person.gender == 'F':
+                    break
+                if person.gender == 'M':
+                    reason = "ERROR: FAMILY: US21: {}: Wife's({}) gender is wrong"
+                    reasonlist.append(reason.format(person.GENDER_LINE, self.WifeID))
+        if not reasonlist:
+            return True
+        else:
+            return False, reasonlist
+
+
+
+
     def child_not_birth_before_parents_marriage(self, personObjectList):
         """
         story 8 child cannt birth before parents marriage
@@ -685,7 +721,12 @@ def main():
         story08 = fm.child_not_birth_before_parents_marriage(PersonObjectList)
         story09 = fm.birth_before_death_of_parents(PersonObjectList)
         story10 = fm.marriage_after_14(PersonObjectList)
+        story15 = fm.fewer_than_15_siblings()
+        story21 = fm.correct_gender_for_role(PersonObjectList)
+        story22 = fm.unique_family_id(family)
+        story24 = fm.unique_families_by_spouses(family)
         story25 = fm.unique_first_name_in_family(PersonObjectList)
+
 
         if story01_marry != True:
             ErrorList.append(story01_marry[1])
@@ -705,23 +746,25 @@ def main():
         if story09 != True:
             for i in range(1, len(story09)):
                 ErrorList.append(story09[i])
-
         if story10 != True:
             for i in range(1,len(story10)):
                 ErrorList.append(story10[i])
+        if story15 != True:
+            for i in range(1,len(story15)):
+                ErrorList.append(story15[i])
+        if story21 != True:
+            for i in range(1, len(story21)):
+                ErrorList.append(story21[i])
+        if story22 != True:
+            for i in range(1, len(story22)):
+                ErrorList.append(story22[i])
+        if story24 != True:
+            for i in range(1, len(story24)):
+                ErrorList.append(story24[i])
         if story25 != True:
             for i in range(1,len(story25)):
                 ErrorList.append(story25[i])
 
-    story22 = fm.unique_family_id(family)
-    if story22 != True:
-        for i in range(1, len(story22)):
-            ErrorList.append(story22[i])
-
-    story24 = fm.unique_families_by_spouses(family)
-    if story24 != True:
-        for i in range(1, len(story24)):
-            ErrorList.append(story24[i])
 
     for error in ErrorList:
         if isinstance(error, list):

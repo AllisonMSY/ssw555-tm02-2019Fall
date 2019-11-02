@@ -174,6 +174,34 @@ class test(unittest.TestCase):
         self.assertTrue(f1.marriage_after_14(personList1))
         self.assertFalse(f2.marriage_after_14(personList2)[0])
 
+    def test_story15(self):
+        f1 = project.Family("F01")
+        f2 = project.Family("F02")
+        f1.HusbandID, f1.WifeID = "I01T", "I02T"
+        f1.Children.append("I05T")
+        f2.HusbandID, f2.WifeID = "I03T", "I04T"
+        f2.Children.extend(["I06T","I07T","I08T","I09T","I10T","I11T","I12T","I13T","I14T","I15T","I16T","I17T","I18T","I19T","I20T","I21T"])
+        self.assertTrue(f1.fewer_than_15_siblings())
+        self.assertFalse(f2.fewer_than_15_siblings()[0])
+
+    def test_story21(self):
+        f1 = project.Family("F01")
+        f2 = project.Family("F02")
+        p1 = project.Person("I01T")
+        p2 = project.Person("I02T")
+        p3 = project.Person("I03T")
+        p4 = project.Person("I04T")
+        p1.name, p1.gender = "Tom", "M"
+        p2.name, p2.gender = "Lisa", "F"
+        p3.name, p3.gender = "Ross", "F"
+        p4.name, p4.gender = "Emily", "M"
+        familyList1 = [p1, p2]
+        familyList2 = [p3, p4]
+        f1.HusbandID, f1.WifeID = "I01T", "I02T"
+        f2.HusbandID, f2.WifeID = "I03T", "I04T"
+        self.assertTrue(f1.correct_gender_for_role(familyList1))
+        self.assertFalse(f2.correct_gender_for_role(familyList2)[0])
+
     def test_story22(self):
         p1 = project.Person("I01")
         p2 = project.Person("I01")
