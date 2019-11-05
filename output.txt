@@ -17,23 +17,39 @@
 | I13 |     Tom /Smith/     |   M    | 14 Jan 1980 |  33 |   N   |  2 MAR 2013 | ['F05'] |       NA       |
 | I14 |    Jude /Johnson/   |   F    |  4 MAY 1984 |  31 |   N   | 12 DEC 2015 | ['F05'] |       NA       |
 | I15 |    Jerry /Smith/    |   M    |  5 FEB 2018 |  1  |   Y   |      NA     | ['F05'] |       NA       |
+| I16 |     Sue /Miller/    |   M    | 15 JAN 2015 |  4  |   Y   |      NA     | ['F06'] |       NA       |
 | I16 |     Sue /Miller/    |   F    | 15 JAN 2015 |  4  |   Y   |      NA     | ['F06'] |       NA       |
-| I16 |     Sue /Miller/    |   F    | 15 JAN 2015 |  4  |   Y   |      NA     | ['F06'] |       NA       |
+| I17 |     Mick /Davis/    |   F    | 15 JAN 2015 |  4  |   Y   |      NA     | ['F06'] |       NA       |
 | I17 |     Mick /Davis/    |   M    | 15 JAN 2015 |  4  |   Y   |      NA     | ['F06'] |       NA       |
-| I17 |     Mick /Davis/    |   M    | 15 JAN 2015 |  4  |   Y   |      NA     | ['F06'] |       NA       |
+| I18 |     Sue /Davis/     |   F    |  8 APR 2018 |  1  |   Y   |      NA     | ['F06'] |       NA       |
+| I19 |     Joe /Davis/     |   M    |  8 APR 2018 |  1  |   Y   |      NA     | ['F06'] |       NA       |
+| I20 |    Jannie /Davis/   |   F    |  8 APR 2018 |  1  |   Y   |      NA     | ['F06'] |       NA       |
+| I21 |     Tom /Davis/     |   M    |  8 APR 2018 |  1  |   Y   |      NA     | ['F06'] |       NA       |
+| I22 |     Jack /Davis/    |   M    |  8 APR 2018 |  1  |   Y   |      NA     | ['F06'] |       NA       |
+| I23 |   Charlie /Davis/   |   M    |  8 APR 2018 |  1  |   Y   |      NA     | ['F06'] |       NA       |
+| I24 |    Sophie /Davis/   |   F    |  8 APR 2018 |  1  |   Y   |      NA     | ['F06'] |       NA       |
+| I25 |     Jill /Davis/    |   F    |  8 APR 2018 |  1  |   Y   |      NA     | ['F06'] |       NA       |
+| I26 |     Tim /Davis/     |   M    | 28 Oct 2019 |  0  |   Y   |      NA     | ['F06'] |       NA       |
+| I27 |    Bonnie /Davis/   |   F    | 28 Oct 2019 |  0  |   Y   |      NA     | ['F06'] |       NA       |
+| I28 |    Phill /Davis/    |   M    | 28 Oct 2019 |  0  |   Y   |      NA     | ['F06'] |       NA       |
+| I29 |     Alex /Davis/    |   F    | 28 Oct 2019 |  0  |   Y   |      NA     | ['F06'] |       NA       |
+| I30 |    Manny /Davis/    |   M    | 28 Oct 2019 |  0  |   Y   |      NA     | ['F06'] |       NA       |
+| I31 |     Joey /Davis/    |   M    | 28 Oct 2019 |  0  |   Y   |      NA     | ['F06'] |       NA       |
+| I32 |     Lily /Davis/    |   F    | 28 Oct 2019 |  0  |   Y   |      NA     | ['F06'] |       NA       |
+| I33 |     Cam /Davis/     |   M    | 28 Oct 2019 |  0  |   Y   |      NA     | ['F06'] |       NA       |
 +-----+---------------------+--------+-------------+-----+-------+-------------+---------+----------------+
-+-----+-------------+-------------+------------+--------------------+---------+----------------+-----------------------+
-|  ID |   Married   |   Divorced  | Husband ID |    Husband Name    | Wife ID |   Wife Name    |        Children       |
-+-----+-------------+-------------+------------+--------------------+---------+----------------+-----------------------+
-| F00 | 21 DEC 1973 | 21 DEC 1973 |    I00     |   Ulises /Bubb/    |   I01   | Jesse /Gaule/  | ['I04', 'I05', 'I06'] |
-| F01 |  3 FEB 1974 |      NA     |    I02     |   Janos /Gaule/    |   I01   | Jesse /Gaule/  |        ['I08']        |
-| F02 | 11 NOV 2030 | 14 JAN 2035 |    I03     | Randolf /Iverson/  |   I04   |  Rikki /Bubb/  |           NA          |
-| F03 | 20 SEP 1894 |  1 JAN 1997 |    I06     |  Marcellus /Bubb/  |   I07   |  Legra /Bubb/  |     ['I10', 'I11']    |
-| F04 | 24 MAY 2002 |  1 JAN 1997 |    I09     | Nicolis /McGrorty/ |   I08   | Valida /Gaule/ |        ['I12']        |
-| F05 |  2 JAN 2000 |      NA     |    I13     |    Tom /Smith/     |   I14   | Jude /Johnson/ |        ['I15']        |
-| F06 | 12 DEC 2017 |      NA     |    I17     |    Mick /Davis/    |   I16   |  Sue /Miller/  |           NA          |
-| F06 | 12 DEC 2017 |      NA     |    I17     |    Mick /Davis/    |   I16   |  Sue /Miller/  |           NA          |
-+-----+-------------+-------------+------------+--------------------+---------+----------------+-----------------------+
++-----+-------------+-------------+------------+--------------------+---------+----------------+------------------------------------------------------------------------------------------------------------------+
+|  ID |   Married   |   Divorced  | Husband ID |    Husband Name    | Wife ID |   Wife Name    |                                                     Children                                                     |
++-----+-------------+-------------+------------+--------------------+---------+----------------+------------------------------------------------------------------------------------------------------------------+
+| F00 | 21 DEC 1973 | 21 DEC 1973 |    I00     |   Ulises /Bubb/    |   I01   | Jesse /Gaule/  |                                              ['I04', 'I05', 'I06']                                               |
+| F01 |  3 FEB 1974 |      NA     |    I02     |   Janos /Gaule/    |   I01   | Jesse /Gaule/  |                                                     ['I08']                                                      |
+| F02 | 11 NOV 2030 | 14 JAN 2035 |    I03     | Randolf /Iverson/  |   I04   |  Rikki /Bubb/  |                                                        NA                                                        |
+| F03 | 20 SEP 1894 |  1 JAN 1997 |    I06     |  Marcellus /Bubb/  |   I07   |  Legra /Bubb/  |                                                  ['I10', 'I11']                                                  |
+| F04 | 24 MAY 2002 |  1 JAN 1997 |    I09     | Nicolis /McGrorty/ |   I08   | Valida /Gaule/ |                                                     ['I12']                                                      |
+| F05 |  2 JAN 2000 |      NA     |    I13     |    Tom /Smith/     |   I14   | Jude /Johnson/ |                                                     ['I15']                                                      |
+| F06 | 12 DEC 2017 |      NA     |    I17     |    Mick /Davis/    |   I16   |  Sue /Miller/  | ['I18', 'I19', 'I20', 'I21', 'I22', 'I23', 'I24', 'I25', 'I26', 'I27', 'I28', 'I29', 'I30', 'I31', 'I32', 'I33'] |
+| F06 | 12 DEC 2017 |      NA     |    I17     |    Mick /Davis/    |   I16   |  Sue /Miller/  | ['I18', 'I19', 'I20', 'I21', 'I22', 'I23', 'I24', 'I25', 'I26', 'I27', 'I28', 'I29', 'I30', 'I31', 'I32', 'I33'] |
++-----+-------------+-------------+------------+--------------------+---------+----------------+------------------------------------------------------------------------------------------------------------------+
 ERROR: INDIVIDUAL: US07:8: I00: More than 150 years old - Birth 2 SEP 1741 : - Death 21 DEC 1973
 ERROR: INDIVIDUAL: US07:17: I01: More than 150 years old - Birth 19 FEB 1746
 ERROR: INDIVIDUAL: US01: 21: I02: Birthday 20 JUL 2038 occurs in the future
@@ -46,33 +62,100 @@ ERROR: INDIVIDUAL: US22: 137: I16 is not a unique ID
 ERROR: INDIVIDUAL: US22: 151: I17 is not a unique ID
 ERROR: INDIVIDUAL: US23:137: Name Sue /Miller/: 141 Birth 15 JAN 2015 are not unique
 ERROR: INDIVIDUAL: US23:151: Name Mick /Davis/: 155 Birth 15 JAN 2015 are not unique
-ERROR: INDIVIDUAL: US04: 158: F00: Divorced 21 DEC 1973 before married 21 DEC 1973
-ANOMALY: FAMILY: US05: 160: Married 21 DEC 1973 after husband's(I00) death on 21 DEC 1973
-ANOMALY: FAMILY: US06: 162: Divorce 21 DEC 1973 after husband's(I00) death on 21 DEC 1973
-ANOMALY: FAMILY: US08:160: F00: Child I04 born 31 AUG 1967 before marriage on 21 DEC 1973
-ANOMALY: FAMILY: US08:160: F00: Child I05 born 4 MAY 1972 before marriage on 21 DEC 1973
-ANOMALY: FAMILY: US08:160: F00: Child I06 born 8 OCT 1971 before marriage on 21 DEC 1973
+ERROR: INDIVIDUAL: US04: 271: F00: Divorced 21 DEC 1973 before married 21 DEC 1973
+ANOMALY: FAMILY: US05: 273: Married 21 DEC 1973 after husband's(I00) death on 21 DEC 1973
+ANOMALY: FAMILY: US06: 275: Divorce 21 DEC 1973 after husband's(I00) death on 21 DEC 1973
+ANOMALY: FAMILY: US08:273: F00: Child I04 born 31 AUG 1967 before marriage on 21 DEC 1973
+ANOMALY: FAMILY: US08:273: F00: Child I05 born 4 MAY 1972 before marriage on 21 DEC 1973
+ANOMALY: FAMILY: US08:273: F00: Child I06 born 8 OCT 1971 before marriage on 21 DEC 1973
+ERROR: FAMILY: US22: 345: F06 is not a unique ID
+ERROR: INDIVIDUAL: US24:345: Husband Mick /Davis/ Wife Sue /Miller/: Married 12 DEC 2017 are not unique
 ERROR:Family:US25:46:I05:In famliy F00, I00 and I05 have same first name Ulises
-ERROR:FAMILY:US10:171: F01: Marriage 3 FEB 1974 before husband (I02) who born on 20 JUL 2038 was 14 years old
-ERROR: FAMILY: US01: 176: F02: Marriage date 11 NOV 2030 occurs in the future
-ERROR: FAMILY: US01: 176: F02: Divorced date 14 JAN 2035 occurs in the future
-ERROR:FAMILY:US10:186: F03: Marriage 20 SEP 1894 before husband (I06) who born on 8 OCT 1971 was 14 years old
-ERROR:FAMILY:US10:186: F03: Marriage 20 SEP 1894 before wife (I07) who born on 4 JUN 1973 was 14 years old
-ERROR: INDIVIDUAL: US04: 194: F04: Divorced 1 JAN 1997 before married 24 MAY 2002
-ANOMALY: FAMILY: US08:196: F04: Child I12 born 4 MAR 2000 before marriage on 24 MAY 2002
-ANOMALY: FAMILY: US09: 208: F05: Child I15 born 5 FEB 2018 after 9 month after husband's(I13) death on 2 MAR 2013
-ANOMALY: FAMILY: US09: 208: F05: Child I15 born 5 FEB 2018 after wife's(I14) death on 12 DEC 2015
-ERROR:FAMILY:US10:212: F06: Marriage 12 DEC 2017 before wife (I16) who born on 15 JAN 2015 was 14 years old
-ERROR:FAMILY:US10:212: F06: Marriage 12 DEC 2017 before wife (I16) who born on 15 JAN 2015 was 14 years old
-ERROR:FAMILY:US10:212: F06: Marriage 12 DEC 2017 before husband (I17) who born on 15 JAN 2015 was 14 years old
-ERROR:FAMILY:US10:212: F06: Marriage 12 DEC 2017 before husband (I17) who born on 15 JAN 2015 was 14 years old
+ERROR:FAMILY:US10:284: F01: Marriage 3 FEB 1974 before husband (I02) who born on 20 JUL 2038 was 14 years old
+ERROR: FAMILY: US22: 345: F06 is not a unique ID
+ERROR: INDIVIDUAL: US24:345: Husband Mick /Davis/ Wife Sue /Miller/: Married 12 DEC 2017 are not unique
+ERROR: FAMILY: US01: 289: F02: Marriage date 11 NOV 2030 occurs in the future
+ERROR: FAMILY: US01: 289: F02: Divorced date 14 JAN 2035 occurs in the future
+ERROR: FAMILY: US22: 345: F06 is not a unique ID
+ERROR: INDIVIDUAL: US24:345: Husband Mick /Davis/ Wife Sue /Miller/: Married 12 DEC 2017 are not unique
+ERROR:FAMILY:US10:299: F03: Marriage 20 SEP 1894 before husband (I06) who born on 8 OCT 1971 was 14 years old
+ERROR:FAMILY:US10:299: F03: Marriage 20 SEP 1894 before wife (I07) who born on 4 JUN 1973 was 14 years old
+ERROR: FAMILY: US22: 345: F06 is not a unique ID
+ERROR: INDIVIDUAL: US24:345: Husband Mick /Davis/ Wife Sue /Miller/: Married 12 DEC 2017 are not unique
+ERROR: INDIVIDUAL: US04: 307: F04: Divorced 1 JAN 1997 before married 24 MAY 2002
+ANOMALY: FAMILY: US08:309: F04: Child I12 born 4 MAR 2000 before marriage on 24 MAY 2002
+ERROR: FAMILY: US22: 345: F06 is not a unique ID
+ERROR: INDIVIDUAL: US24:345: Husband Mick /Davis/ Wife Sue /Miller/: Married 12 DEC 2017 are not unique
+ANOMALY: FAMILY: US09: 321: F05: Child I15 born 5 FEB 2018 after 9 month after husband's(I13) death on 2 MAR 2013
+ANOMALY: FAMILY: US09: 321: F05: Child I15 born 5 FEB 2018 after wife's(I14) death on 12 DEC 2015
+ERROR: FAMILY: US22: 345: F06 is not a unique ID
+ERROR: INDIVIDUAL: US24:345: Husband Mick /Davis/ Wife Sue /Miller/: Married 12 DEC 2017 are not unique
+ERROR:FAMILY:US10:325: F06: Marriage 12 DEC 2017 before wife (I16) who born on 15 JAN 2015 was 14 years old
+ERROR:FAMILY:US10:325: F06: Marriage 12 DEC 2017 before wife (I16) who born on 15 JAN 2015 was 14 years old
+ERROR:FAMILY:US10:325: F06: Marriage 12 DEC 2017 before husband (I17) who born on 15 JAN 2015 was 14 years old
+ERROR:FAMILY:US10:325: F06: Marriage 12 DEC 2017 before husband (I17) who born on 15 JAN 2015 was 14 years old
+ANOMALY: FAMILY: US15: 323: Family F06 has more than 15 siblings
+ERROR: FAMILY: US21: 146: Husband's(I17) gender is wrong
+ERROR: FAMILY: US21: 132: Wife's(I16) gender is wrong
+ERROR: FAMILY: US22: 345: F06 is not a unique ID
+ERROR: INDIVIDUAL: US24:345: Husband Mick /Davis/ Wife Sue /Miller/: Married 12 DEC 2017 are not unique
 ERROR:Family:US25:138:I16:In famliy F06, I16 and I16 have same first name Sue
 ERROR:Family:US25:152:I17:In famliy F06, I17 and I17 have same first name Mick
-ERROR:FAMILY:US10:218: F06: Marriage 12 DEC 2017 before wife (I16) who born on 15 JAN 2015 was 14 years old
-ERROR:FAMILY:US10:218: F06: Marriage 12 DEC 2017 before wife (I16) who born on 15 JAN 2015 was 14 years old
-ERROR:FAMILY:US10:218: F06: Marriage 12 DEC 2017 before husband (I17) who born on 15 JAN 2015 was 14 years old
-ERROR:FAMILY:US10:218: F06: Marriage 12 DEC 2017 before husband (I17) who born on 15 JAN 2015 was 14 years old
+ERROR:Family:US25:159:I18:In famliy F06, I16 and I18 have same first name Sue
+ERROR:FAMILY:US10:347: F06: Marriage 12 DEC 2017 before wife (I16) who born on 15 JAN 2015 was 14 years old
+ERROR:FAMILY:US10:347: F06: Marriage 12 DEC 2017 before wife (I16) who born on 15 JAN 2015 was 14 years old
+ERROR:FAMILY:US10:347: F06: Marriage 12 DEC 2017 before husband (I17) who born on 15 JAN 2015 was 14 years old
+ERROR:FAMILY:US10:347: F06: Marriage 12 DEC 2017 before husband (I17) who born on 15 JAN 2015 was 14 years old
+ANOMALY: FAMILY: US15: 345: Family F06 has more than 15 siblings
+ERROR: FAMILY: US21: 146: Husband's(I17) gender is wrong
+ERROR: FAMILY: US21: 132: Wife's(I16) gender is wrong
+ERROR: FAMILY: US22: 345: F06 is not a unique ID
+ERROR: INDIVIDUAL: US24:345: Husband Mick /Davis/ Wife Sue /Miller/: Married 12 DEC 2017 are not unique
 ERROR:Family:US25:138:I16:In famliy F06, I16 and I16 have same first name Sue
 ERROR:Family:US25:152:I17:In famliy F06, I17 and I17 have same first name Mick
-ERROR: FAMILY: US22: 216: F06 is not a unique ID
-ERROR: INDIVIDUAL: US24:216: Husband Mick /Davis/ Wife Sue /Miller/: Married 12 DEC 2017 are not unique
+ERROR:Family:US25:159:I18:In famliy F06, I16 and I18 have same first name Sue
+===== UPCOMING BIRTHDAY =====
++-----+----------------+--------+-------------+-----+-------+-------+---------+---------+
+|  ID |      Name      | Gender |   Birthday  | Age | Alive | Death |  Child  |  Spouse |
++-----+----------------+--------+-------------+-----+-------+-------+---------+---------+
+| I08 | Valida /Gaule/ |   F    | 11 NOV 1976 |  42 |   Y   |   NA  | ['F01'] | ['F04'] |
+| I10 | Nikolos /Bubb/ |   M    |  2 DEC 1996 |  22 |   Y   |   NA  | ['F03'] |    NA   |
+| I11 | Carlina /Bubb/ |   F    |  2 DEC 1996 |  22 |   Y   |   NA  | ['F03'] |    NA   |
++-----+----------------+--------+-------------+-----+-------+-------+---------+---------+
+=============================
+===== RECENT BIRTH =====
++-----+----------------+--------+-------------+-----+-------+-------+---------+--------+
+|  ID |      Name      | Gender |   Birthday  | Age | Alive | Death |  Child  | Spouse |
++-----+----------------+--------+-------------+-----+-------+-------+---------+--------+
+| I26 |  Tim /Davis/   |   M    | 28 Oct 2019 |  0  |   Y   |   NA  | ['F06'] |   NA   |
+| I27 | Bonnie /Davis/ |   F    | 28 Oct 2019 |  0  |   Y   |   NA  | ['F06'] |   NA   |
+| I28 | Phill /Davis/  |   M    | 28 Oct 2019 |  0  |   Y   |   NA  | ['F06'] |   NA   |
+| I29 |  Alex /Davis/  |   F    | 28 Oct 2019 |  0  |   Y   |   NA  | ['F06'] |   NA   |
+| I30 | Manny /Davis/  |   M    | 28 Oct 2019 |  0  |   Y   |   NA  | ['F06'] |   NA   |
+| I31 |  Joey /Davis/  |   M    | 28 Oct 2019 |  0  |   Y   |   NA  | ['F06'] |   NA   |
+| I32 |  Lily /Davis/  |   F    | 28 Oct 2019 |  0  |   Y   |   NA  | ['F06'] |   NA   |
+| I33 |  Cam /Davis/   |   M    | 28 Oct 2019 |  0  |   Y   |   NA  | ['F06'] |   NA   |
++-----+----------------+--------+-------------+-----+-------+-------+---------+--------+
+=============================
+===== RECENT DEATH =====
+ NULL 
+=============================
+===== UPCOMING ANNIVERSARY =====
+NULL
+================================
+===== LIVING MARRIED PEOPLE =====
++-----+--------------------+--------+-------------+-----+-------+-------+---------+----------------+
+|  ID |        Name        | Gender |   Birthday  | Age | Alive | Death |  Child  |     Spouse     |
++-----+--------------------+--------+-------------+-----+-------+-------+---------+----------------+
+| I01 |   Jesse /Gaule/    |   F    | 19 FEB 1746 | 273 |   Y   |   NA  |    NA   | ['F00', 'F01'] |
+| I03 | Randolf /Iverson/  |   M    | 24 JAN 1968 |  51 |   Y   |   NA  |    NA   |    ['F02']     |
+| I04 |    Rikki /Bubb/    |   F    | 31 AUG 1967 |  52 |   Y   |   NA  | ['F00'] |    ['F02']     |
+| I06 |  Marcellus /Bubb/  |   M    |  8 OCT 1971 |  48 |   Y   |   NA  | ['F00'] |    ['F03']     |
+| I07 |    Legra /Bubb/    |   F    |  4 JUN 1973 |  46 |   Y   |   NA  |    NA   |    ['F03']     |
+| I08 |   Valida /Gaule/   |   F    | 11 NOV 1976 |  42 |   Y   |   NA  | ['F01'] |    ['F04']     |
+| I09 | Nicolis /McGrorty/ |   M    | 20 JUL 1976 |  43 |   Y   |   NA  |    NA   |    ['F04']     |
++-----+--------------------+--------+-------------+-----+-------+-------+---------+----------------+
+=============================
+===== LIVING SINGLE PEOPLE OVER 30 =====
+ NULL 
+=============================
