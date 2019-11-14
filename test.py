@@ -10,7 +10,7 @@ class test(unittest.TestCase):
         fileName = "./testFile/travis_test.txt"
         res = readFile.readGCFile(fileName)
         expectResult = [[0, 'INDI', 'I00', 4], [1, 'NAME', 'Ulises /Bubb/', 5], [1, 'SEX', 'M', 6], [1, 'BIRT', '', 8], [2, 'DATE', '2 SEP 1941', 9], [1, 'DEAT', '', 10], [2, 'DATE', '21 DEC 1973', 11], [1, 'FAMS',
-                                                                                                                                                                                                            'F00', 12], [0, 'FAM', 'F00', 16], [1, 'MARR', '', 17], [2, 'DATE', '14 FEB 1966', 18], [1, 'HUSB', 'I00', 19], [1, 'WIFE', 'I01', 20], [1, 'CHIL', 'I04', 21], [1, 'CHIL', 'I05', 22], [1, 'CHIL', 'I06', 23]]
+        'F00', 12], [0, 'FAM', 'F00', 16], [1, 'MARR', '', 17], [2, 'DATE', '14 FEB 1966', 18], [1, 'HUSB', 'I00', 19], [1, 'WIFE', 'I01', 20], [1, 'CHIL', 'I04', 21], [1, 'CHIL', 'I05', 22], [1, 'CHIL', 'I06', 23]]
         self.assertEqual(res, expectResult)
 
     def test_story01(self):
@@ -261,7 +261,22 @@ class test(unittest.TestCase):
         self.assertTrue(f1.unique_first_name_in_family(personList1))
         self.assertFalse(f2.unique_first_name_in_family(personList2)[0])
 
-    def test_stor30(self):
+    def test_story28(self):
+        p1 = project.Person("I01T")
+        p2 = project.Person("I02T")
+        p3 = project.Person("I03T")
+        p1.name, p1.gender, p1.BirthDate, p1.DeathDate, p1.FID_spouse = "John /ad/", "M", "14 Jan 1980", "2 MAR 2013", ["F00"]
+        p2.name, p2.gender, p2.BirthDate, p2.DeathDate, p2.FID_spouse = "Ali /ad/", "F", "4 MAY 1984", "12 DEC 2015", ["F00"] 
+        p3.name, p3.gender, p3.BirthDate, p3.FID_child = "Zed /ad/", "F", "5 FEB 2018", ["F00"]
+        f1 = project.Family("F00")
+        f1.HusbandID, f1.WifeID = "I01T", "I02T"
+        f1.Children.append("I03T")
+        personList = [p1, p2, p3]
+        familyList = [f1]
+        res = project.list_all_orphans(familyList, personList)
+        self.assertEqual([p3], res)
+
+    def test_story30(self):
         p1 = project.Person("I01T")
         p2 = project.Person("I02T")
         p3 = project.Person("I03T")
@@ -292,6 +307,27 @@ class test(unittest.TestCase):
         personList2 = [p2,p3,p4,p5]
         self.assertEqual(project.Person.list_living_single(personList1),[p1,p2])
         self.assertEqual(project.Person.list_living_single(personList2),[p2])
+
+    def test_story33(self):
+        p1 = project.Person("I01T")
+        p2 = project.Person("I02T")
+        p3 = project.Person("I03T")
+        p4 = project.Person("I04T")
+        p5 = project.Person("I05T")
+        p1.name, p1.gender, p1.BirthDate, p1.DeathDate, p1.FID_spouse = "John /ad/", "M", "14 Jan 1980", "2 MAR 2013", ["F00"]
+        p2.name, p2.gender, p2.BirthDate, p2.DeathDate, p2.FID_spouse = "Ali /ad/", "F", "4 MAY 1984", "12 DEC 2015", ["F00"] 
+        p3.name, p3.gender, p3.BirthDate, p3.FID_child = "Zed /ad/", "F", "5 FEB 2018", ["F00"]
+        p4.name, p4.gender, p4.BirthDate, p4.FID_child = "Tom /ad/", "F", "5 FEB 2003", ["F00"]
+        p5.name, p5.gender, p5.BirthDate, p5.FID_child = "Sue /ad/", "F", "5 FEB 2007", ["F00"]
+        f1 = project.Family("F00")
+        f1.HusbandID, f1.WifeID = "I01T", "I02T"
+        f1.Children.append("I03T")
+        f1.Children.append("I04T")
+        f1.Children.append("I05T")
+        personList = [p1, p2, p3, p4, p5]
+        familyList = [f1]
+        res = project.list_siblings_by_age("F00", familyList, personList)
+        self.assertEquals([p4,p5,p3], res)
 
     def test_story35(self):
         p1 = project.Person("I01T")

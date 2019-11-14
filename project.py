@@ -34,6 +34,44 @@ def get_year_gap(first,second):
           ((first_year.month, first_year.day) < (second_year.month, second_year.day))
     return gap
 
+def find_person_by_id(personId,personList):
+    for each in personList:
+        if each.INDI_id == personId:
+            return each
+    return -1
+
+def find_family_by_id(familyId, familyList):
+    for each in familyList:
+        if each.ID == familyId:
+            return each
+    return -1
+
+def list_all_orphans(familyList, personList):
+    # story 33
+    res = []
+    for eachFamily in familyList:
+        husband = find_person_by_id(eachFamily.HusbandID,personList)
+        wife = find_person_by_id(eachFamily.WifeID,personList)
+        if husband.DeathDate != "NA" and wife.DeathDate != "NA":
+            children = eachFamily.Children
+            for childID in children:
+                child = find_person_by_id(childID, personList)
+                if get_age(child) < 18:
+                    res.append(child)
+    return res
+
+def list_siblings_by_age(familyId, familyList, personList):
+    family = find_family_by_id(familyId,familyList )
+    children = family.Children
+    res = []
+    for childId in children:
+        child = find_person_by_id(childId, personList)
+        child_age = get_age(child)
+        res.append((child, child_age))
+
+    res.sort(reverse=True,key=lambda x: x[1])
+    return list( map(lambda each: each[0], res))
+
 class Person:
     def __init__(self, INDI_id):
         self.INDI_id = INDI_id
@@ -812,6 +850,12 @@ def main():
     Family.list_upcoming_anniversaries_from_date(family, PersonObjectList, date.today())
     Person.list_living_married(PersonObjectList)
     Person.list_living_single(PersonObjectList)
+
+    # Print information list
+    allOrphans = list_all_orphans(family,PersonObjectList)
+    printPrettyTable.printPeoplePrettyTable(allOrphans)
+    allSiblingsInOneFamily = list_siblings_by_age("F00", family, PersonObjectList)
+    printPrettyTable.printPeoplePrettyTable(allSiblingsInOneFamily)
 
 if __name__ == '__main__':
     main()
