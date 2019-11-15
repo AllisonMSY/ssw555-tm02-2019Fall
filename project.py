@@ -375,9 +375,6 @@ class Family:
         else:
             return False, reasonlist
 
-
-
-
     def child_not_birth_before_parents_marriage(self, personObjectList):
         """
         story 8 child cannt birth before parents marriage
@@ -614,6 +611,71 @@ class Family:
             self.ID_LINE, self.MARRAY_LINE, self.DIVORCED_LINE,
             self.HUSBAND_LINE, self.WIFE_LINE, self.CHILDREN_LINE))
 
+    def get_survivor_in_the_family(self, PersonList):
+        #Story 37
+        dead = []
+        survivor = []
+        for person in PersonList:
+            if self.HusbandID == person.INDI_id and person.DeathDate != "NA":
+                death = datetime.datetime.strptime(person.DeathDate, "%d %b %Y").date()
+                gap = (date.today() - death).days
+                if 0 <= gap <=30:
+                    dead.append(person)
+                    for individual in PersonList:
+                        if self.WifeID == individual.INDI_id and individual.DeathDate == "NA":
+                            survivor.append(individual)
+                    for child in self.Children:
+                        for p in PersonList:
+                            if child == p.INDI_id and p.DeathDate == "NA":
+                                survivor.append(p)
+        for person in PersonList:
+            if self.WifeID == person.INDI_id and person.DeathDate != "NA":
+                today = date.today()
+                death = datetime.datetime.strptime(person.DeathDate, "%d %b %Y").date()
+                gap = (today - death).days
+                if 0 <= gap <=30:
+                    dead.append(person)
+                    if len(dead)>1:
+                        break
+                    else:
+                        for individual in PersonList:
+                            if self.HusbandID == individual.INDI_id and individual.DeathDate == "NA":
+                                survivor.append(individual)
+                        for child in self.Children:
+                            for p in PersonList:
+                                if child == p.INDI_id and p.DeathDate == "NA":
+                                    survivor.append(p)
+        if len(survivor)>0 and len(dead)>0:
+            print("==========US37====================")
+            print("==========recent dead within 30 days==============")
+            printPrettyTable.printPeoplePrettyTable(dead)
+            print("============The survivor in the previous dead's family ==============")
+            printPrettyTable.printPeoplePrettyTable(survivor)
+        return dead,survivor
+
+    def multiple_birth_less_than_5(self,PersonList):
+        #story 14
+        reasonList = []
+        if len(self.Children)>=5:
+            children_birth_dic = dict()
+            for child in self.Children:
+                for person in PersonList:
+                    if person.INDI_id == child:
+                        if person.BirthDate in children_birth_dic:
+                            children_birth_dic[person.BirthDate] += 1
+                        else:
+                            children_birth_dic[person.BirthDate] = 1
+            for key in children_birth_dic:
+                if children_birth_dic[key]> 5:
+                    reason = "ERROR: FAMILY: US14: {}: have more than 5 children birth on the same day {}"
+                    reasonList.append(reason.format(self.CHILDREN_LINE,key))
+        if not reasonList:
+            return True
+        else:
+            return False,reasonList
+
+
+
 
 def main():
     allLine = readFile.readGCFile(fileName)
@@ -796,6 +858,7 @@ def main():
         story22 = fm.unique_family_id(family)
         story24 = fm.unique_families_by_spouses(family)
         story25 = fm.unique_first_name_in_family(PersonObjectList)
+        story14 = fm.multiple_birth_less_than_5(PersonObjectList)
 
 
         if story01_marry != True:
@@ -819,6 +882,9 @@ def main():
         if story10 != True:
             for i in range(1,len(story10)):
                 ErrorList.append(story10[i])
+        if story14 != True:
+            for i in range(1,len(story14)):
+                ErrorList.append(story14[i])
         if story15 != True:
             for i in range(1,len(story15)):
                 ErrorList.append(story15[i])
@@ -842,6 +908,9 @@ def main():
                 print(e)
         else:
             print(error)
+
+    for fm in family:
+        story37 = fm.get_survivor_in_the_family(PersonObjectList)
 
     # Print upcoming list
     Person.list_upcoming_birthdays_from_date(PersonObjectList, date.today())
