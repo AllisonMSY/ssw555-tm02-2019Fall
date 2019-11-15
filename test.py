@@ -174,6 +174,26 @@ class test(unittest.TestCase):
         self.assertTrue(f1.marriage_after_14(personList1))
         self.assertFalse(f2.marriage_after_14(personList2)[0])
 
+    def test_story14(self):
+        p1 = project.Person("I01T")
+        p2 = project.Person("I02T")
+        p3 = project.Person("I03T")
+        p4 = project.Person("I04T")
+        p5 = project.Person("I05T")
+        p6 = project.Person("I06T")
+        p7 = project.Person("I07T")
+        plist = [p1,p2,p3,p4,p5,p6,p7]
+        for p in plist:
+            p.BirthDate = "21 NOV 2000"
+        f1 = project.Family("F01")
+        f2 = project.Family("F02")
+        f1.Children.extend(["I01T","I02T","I03T","I04T","I05T","I06T","I07T"])
+        f2.Children.extend(["I01T","I02T"])
+        self.assertTrue(f2.multiple_birth_less_than_5(plist))
+        self.assertFalse(f1.multiple_birth_less_than_5(plist)[0])
+
+
+
     def test_story15(self):
         f1 = project.Family("F01")
         f2 = project.Family("F02")
@@ -344,6 +364,32 @@ class test(unittest.TestCase):
         p1.name, p1.DeathDate, p1.BirthDate = "A", "31 Oct 2019", "31 Oct 2000"
         p2.name, p2.DeathDate, p2.BirthDate = "B", "21 JUL 1983", "21 JUL 1940"
         self.assertEqual(project.Person.list_recent_death([p1, p2, p3], date(2019, 11, 2)), [p1])
+
+    def test_story37(self):
+        p1 = project.Person("I01T")
+        p2 = project.Person("I02T")
+        p3 = project.Person("I03T")
+        p4 = project.Person("I04T")
+        p1.name, p1.DeathDate, p1.BirthDate = "A", "13 NOV 2019", "31 Oct 1980"
+        p2.name, p2.BirthDate = "B",  "21 JUL 1940"
+        p3.name, p3.DeathDate, p3.BirthDate = "A", "13 NOV 2019", "31 Oct 2000"
+        p4.name, p4.BirthDate = "B",  "21 JUL 2018"
+        f1 = project.Family("F00")
+        f2 = project.Family("F01")
+        f3 = project.Family("F00")
+        f1.HusbandID,f1.WifeID = "I01T","I02T"
+        f1.Children.append("I04T")
+        f2.WifeID,f2.HusbandID = "I01T","I02T"
+        f3.HusbandID,f3.WifeID = "I01T","I03T"
+        f3.Children.append("I04T")
+        plist = [p1,p2,p3,p4]
+        self.assertEqual(f1.get_survivor_in_the_family(plist)[0],[p1])
+        self.assertEqual(f1.get_survivor_in_the_family(plist)[1],[p2,p4])
+        self.assertEqual(f2.get_survivor_in_the_family(plist)[0],[p1])
+        self.assertEqual(f2.get_survivor_in_the_family(plist)[1],[p2])
+        self.assertEqual(f3.get_survivor_in_the_family(plist)[0],[p1,p3])
+        self.assertEqual(f3.get_survivor_in_the_family(plist)[1],[p4])
+
 
     def test_story38(self):
         p1 = project.Person("I01T")
