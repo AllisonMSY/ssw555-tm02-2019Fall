@@ -174,6 +174,32 @@ class test(unittest.TestCase):
         self.assertTrue(f1.marriage_after_14(personList1))
         self.assertFalse(f2.marriage_after_14(personList2)[0])
 
+    def test_story12(self):
+        p1 = project.Person("I01")
+        p1.name, p1.gender, p1.BirthDate = "hhh", "M", "26 MAY 1776"
+        p2 = project.Person("I02")
+        p2.name, p2.gender, p2.BirthDate = "www", "F", "8 FEB 1780"
+        p3 = project.Person("I03")
+        p3.name, p3.gender, p3.BirthDate = "ccc", "F", "14 JUL 2019"
+        p4 = project.Person("I04")
+        p4.name, p4.gender, p4.BirthDate = "kkk", "M", "10 JAN 1990"
+        p5 = project.Person("I05")
+        p5.name, p5.gender, p5.BirthDate = "lll", "F", "23 FEB 1990"
+        p6 = project.Person("I06")
+        p6.name, p6.gender, p6.BirthDate = "ttt", "M", "24 DEC 2018"
+
+        personList1 = [p1, p2, p3]
+        personList2 = [p4, p5, p6]
+
+        f1 = project.Family("FFF")
+        f1.HusbandID, f1.WifeID = "I01", "I02"
+        f1.Children.append("I03")
+        f2 = project.Family("FFF01")
+        f2.HusbandID, f2.WifeID = "I04", "I05"
+        f2.Children.append("I06")
+        self.assertFalse(f1.Parents_not_too_old(personList1)[0])
+        self.assertTrue(f2.Parents_not_too_old(personList2))
+
     def test_story14(self):
         p1 = project.Person("I01T")
         p2 = project.Person("I02T")
@@ -192,8 +218,6 @@ class test(unittest.TestCase):
         self.assertTrue(f2.multiple_birth_less_than_5(plist))
         self.assertFalse(f1.multiple_birth_less_than_5(plist)[0])
 
-
-
     def test_story15(self):
         f1 = project.Family("F01")
         f2 = project.Family("F02")
@@ -203,6 +227,32 @@ class test(unittest.TestCase):
         f2.Children.extend(["I06T","I07T","I08T","I09T","I10T","I11T","I12T","I13T","I14T","I15T","I16T","I17T","I18T","I19T","I20T","I21T"])
         self.assertTrue(f1.fewer_than_15_siblings())
         self.assertFalse(f2.fewer_than_15_siblings()[0])
+
+    def test_story16(self):
+        p1 = project.Person("I01")
+        p1.name, p1.gender = "Tom /Davis/", "M"
+        p2 = project.Person("I02")
+        p2.name, p2.gender = "Lily /Davis/", "F"
+        p3 = project.Person("I03")
+        p3.name, p3.gender = "Jerry /Miller/", "M"
+        p4 = project.Person("I04")
+        p4.name, p4.gender = "Mike /Miller/", "M"
+        p5 = project.Person("I05")
+        p5.name, p5.gender = "Sue /Miller/", "F"
+        p6 = project.Person("I06")
+        p6.name, p6.gender = "Alex /Miller/", "M"
+
+        personList1 = [p1, p2, p3]
+        personList2 = [p4, p5, p6]
+
+        f1 = project.Family("FFF")
+        f1.HusbandID, f1.WifeID = "I01", "I02"
+        f1.Children.append("I03")
+        f2 = project.Family("FFF01")
+        f2.HusbandID, f2.WifeID = "I04", "I05"
+        f2.Children.append("I06")
+        self.assertFalse(f1.Male_last_names(personList1)[0])
+        self.assertTrue(f2.Male_last_names(personList2))
 
     def test_story21(self):
         f1 = project.Family("F01")
@@ -347,7 +397,7 @@ class test(unittest.TestCase):
         personList = [p1, p2, p3, p4, p5]
         familyList = [f1]
         res = project.list_siblings_by_age("F00", familyList, personList)
-        self.assertEquals([p4,p5,p3], res)
+        self.assertEqual([p4,p5,p3], res)
 
     def test_story35(self):
         p1 = project.Person("I01T")

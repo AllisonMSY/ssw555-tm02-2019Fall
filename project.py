@@ -178,6 +178,9 @@ class Person:
     def get_first_name(self):
         return self.name.split(' ')[0]
 
+    def get_last_name(self):
+        return self.name.split(' ')[1]
+
     def birth_before_current_date(self):
         # Story 01 Birth
         born = datetime.datetime.strptime(self.BirthDate, "%d %b %Y").date()
@@ -351,6 +354,40 @@ class Family:
         reason = "ANOMALY: FAMILY: US15: {}: Family {} has more than 15 siblings"
         return False, reason.format(self.ID_LINE, self.ID)
 
+    def Parents_not_too_old(self, personObjectList):
+        #Story 12
+        reasonlist = []
+        if self.Children:
+            for cid in self.Children:
+                for person in personObjectList:
+                    if person.INDI_id == cid:
+                        child_age = get_age(person)
+                    # check Husband
+                        for person in personObjectList:
+                            if person.INDI_id == self.HusbandID:
+                                father_age = get_age(person)
+                                age_gap = father_age - child_age
+                                if (age_gap < 80):
+                                    break
+                                if(age_gap >= 80):
+                                    reason = "ANOMALY: FAMILY: US12: {}: {}: Father({}) should be less than 80 years older than his children({})"
+                                    reasonlist.append(reason.format(self.HUSBAND_LINE, self.ID, self.HusbandID, cid))
+                    # check Wife
+                        for person in personObjectList:
+                            if person.INDI_id == self.WifeID:
+                                mother_age = get_age(person)
+                                age_gap = mother_age - child_age
+                                if (age_gap < 60):
+                                    break
+                                if(age_gap >= 60):
+                                    reason = "ANOMALY: FAMILY: US12: {}: {}: Mother({}) should be less than 60 years older than her children({})"
+                                    reasonlist.append(reason.format(self.WIFE_LINE, self.ID, self.WifeID, cid))
+        if not reasonlist:
+            return True
+        else:
+            return False, reasonlist
+
+
     def correct_gender_for_role(self, personObjectList):
         #Story 21
         reasonlist = []
@@ -498,6 +535,25 @@ class Family:
             return True
         else:
             return False,reasonList
+
+    def Male_last_names(self, personObjectList):
+        #Story 16
+        reasonList = []
+        lastname = None
+        reason = "ERROR:Family:US16:{}:{}:In famliy {}, the male {} have different last name {} with the family name {}"
+        for person in personObjectList:
+            if person.INDI_id == self.HusbandID:
+                lastname = person.get_last_name()
+            for child in self.Children:
+                if person.INDI_id == child:
+                    if person.gender == 'M':
+                        if person.get_last_name() != lastname:
+                            reasonList.append(
+                                reason.format(person.NAME_LINE, child, self.ID, child, person.get_last_name(), lastname))
+        if not reasonList:
+            return True
+        else:
+            return False, reasonList
 
     def unique_families_by_spouses(self, family):
         # story 24
@@ -853,7 +909,9 @@ def main():
         story08 = fm.child_not_birth_before_parents_marriage(PersonObjectList)
         story09 = fm.birth_before_death_of_parents(PersonObjectList)
         story10 = fm.marriage_after_14(PersonObjectList)
+        story12 = fm.Parents_not_too_old(PersonObjectList)
         story15 = fm.fewer_than_15_siblings()
+        story16 = fm.Male_last_names(PersonObjectList)
         story21 = fm.correct_gender_for_role(PersonObjectList)
         story22 = fm.unique_family_id(family)
         story24 = fm.unique_families_by_spouses(family)
@@ -882,12 +940,18 @@ def main():
         if story10 != True:
             for i in range(1,len(story10)):
                 ErrorList.append(story10[i])
+        if story12 != True:
+            for i in range(1,len(story12)):
+                ErrorList.append(story12[i])
         if story14 != True:
             for i in range(1,len(story14)):
                 ErrorList.append(story14[i])
         if story15 != True:
             for i in range(1,len(story15)):
                 ErrorList.append(story15[i])
+        if story16 != True:
+            for i in range(1,len(story16)):
+                ErrorList.append(story16[i])
         if story21 != True:
             for i in range(1, len(story21)):
                 ErrorList.append(story21[i])
