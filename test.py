@@ -286,7 +286,7 @@ class test(unittest.TestCase):
         p2 = project.Person("I02T")
         p3 = project.Person("I03T")
         p1.name, p1.gender, p1.BirthDate, p1.DeathDate, p1.FID_spouse = "John /ad/", "M", "14 Jan 1980", "2 MAR 2013", ["F00"]
-        p2.name, p2.gender, p2.BirthDate, p2.DeathDate, p2.FID_spouse = "Ali /ad/", "F", "4 MAY 1984", "12 DEC 2015", ["F00"] 
+        p2.name, p2.gender, p2.BirthDate, p2.DeathDate, p2.FID_spouse = "Ali /ad/", "F", "4 MAY 1984", "12 DEC 2015", ["F00"]
         p3.name, p3.gender, p3.BirthDate, p3.FID_child = "Zed /ad/", "F", "5 FEB 2018", ["F00"]
         f1 = project.Family("F00")
         f1.HusbandID, f1.WifeID = "I01T", "I02T"
@@ -295,6 +295,17 @@ class test(unittest.TestCase):
         familyList = [f1]
         res = project.list_all_orphans(familyList, personList)
         self.assertEqual([p3], res)
+
+    def test_story29(self):
+        p1 = project.Person("I01T")
+        p2 = project.Person("I02T")
+        p3 = project.Person("I03T")
+        p1.name, p1.gender, p1.BirthDate, p1.DeathDate, p1.FID_spouse = "John /ad/", "M", "14 Jan 1980", "2 MAR 2013", ["F00"]
+        p2.name, p2.gender, p2.BirthDate, p2.DeathDate, p2.FID_spouse = "Ali /ad/", "F", "4 MAY 1984", "12 DEC 2015", ["F00"]
+        p3.name, p3.gender, p3.BirthDate, p3.FID_child = "Zed /ad/", "F", "5 FEB 2018", ["F00"]
+        personList = [p1, p2, p3]
+        res = p1.list_deceased_individuals(personList)
+        self.assertEqual([p1, p2], res)
 
     def test_story30(self):
         p1 = project.Person("I01T")
@@ -328,6 +339,17 @@ class test(unittest.TestCase):
         self.assertEqual(project.Person.list_living_single(personList1),[p1,p2])
         self.assertEqual(project.Person.list_living_single(personList2),[p2])
 
+    def test_story32(self):
+        p1 = project.Person("I01T")
+        p2 = project.Person("I02T")
+        p3 = project.Person("I03T")
+        p1.name, p1.gender, p1.BirthDate, p1.DeathDate, p1.FID_spouse = "John /ad/", "M", "4 MAY 1984", "2 MAR 2013", ["F00"]
+        p2.name, p2.gender, p2.BirthDate, p2.DeathDate, p2.FID_spouse = "Ali /ad/", "F", "4 MAY 1984", "12 DEC 2015", ["F00"]
+        p3.name, p3.gender, p3.BirthDate, p3.FID_child = "Zed /ad/", "F", "5 FEB 2018", ["F00"]
+        personList = [p1, p2, p3]
+        res = p1.list_multiple_births(personList)
+        self.assertEqual([p1, p2], res)
+
     def test_story33(self):
         p1 = project.Person("I01T")
         p2 = project.Person("I02T")
@@ -335,7 +357,7 @@ class test(unittest.TestCase):
         p4 = project.Person("I04T")
         p5 = project.Person("I05T")
         p1.name, p1.gender, p1.BirthDate, p1.DeathDate, p1.FID_spouse = "John /ad/", "M", "14 Jan 1980", "2 MAR 2013", ["F00"]
-        p2.name, p2.gender, p2.BirthDate, p2.DeathDate, p2.FID_spouse = "Ali /ad/", "F", "4 MAY 1984", "12 DEC 2015", ["F00"] 
+        p2.name, p2.gender, p2.BirthDate, p2.DeathDate, p2.FID_spouse = "Ali /ad/", "F", "4 MAY 1984", "12 DEC 2015", ["F00"]
         p3.name, p3.gender, p3.BirthDate, p3.FID_child = "Zed /ad/", "F", "5 FEB 2018", ["F00"]
         p4.name, p4.gender, p4.BirthDate, p4.FID_child = "Tom /ad/", "F", "5 FEB 2003", ["F00"]
         p5.name, p5.gender, p5.BirthDate, p5.FID_child = "Sue /ad/", "F", "5 FEB 2007", ["F00"]

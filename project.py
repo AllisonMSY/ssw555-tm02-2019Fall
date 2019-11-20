@@ -112,6 +112,21 @@ class Person:
         return upcoming_birthdays_person_list
 
     @staticmethod
+    def list_deceased_individuals(personList):
+        # story 29
+        deceased_individuals = []
+        for person in personList:
+            if person.DeathDate != 'NA':
+                deceased_individuals.append(person)
+        print("===== LIST DECEASED INDIVIDUALS =====")
+        if deceased_individuals:
+            printPrettyTable.printPeoplePrettyTable(deceased_individuals)
+        else:
+            print(" NULL ")
+        print("=============================")
+        return deceased_individuals
+
+    @staticmethod
     def list_living_married(personList):
         #story 30
         living_married = []
@@ -140,6 +155,26 @@ class Person:
             print(" NULL ")
         print("=============================")
         return living_single
+
+    @staticmethod
+    def list_multiple_births(personList):
+        # story 32
+        birth_dict = collections.defaultdict(list)
+        for person in personList:
+            if person.BirthDate != 'NA':
+                birth_dict[person.BirthDate].append(person)
+        multiple_births = []
+        for birth_date in birth_dict:
+            if len(birth_dict[birth_date]) > 1:
+                multiple_births += birth_dict[birth_date]
+        print("===== LIST MULTIPLE BIRTHS =====")
+        if multiple_births:
+            printPrettyTable.printPeoplePrettyTable(multiple_births)
+        else:
+            print(" NULL ")
+        print("=============================")
+        return multiple_births
+
 
     @staticmethod
     def list_recent_birth(personList, today):
@@ -919,6 +954,8 @@ def main():
     Family.list_upcoming_anniversaries_from_date(family, PersonObjectList, date.today())
     Person.list_living_married(PersonObjectList)
     Person.list_living_single(PersonObjectList)
+    Person.list_deceased_individuals(PersonObjectList)
+    Person.list_multiple_births(PersonObjectList)
 
     # Print information list
     allOrphans = list_all_orphans(family,PersonObjectList)
