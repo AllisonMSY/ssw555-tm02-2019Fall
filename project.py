@@ -103,7 +103,7 @@ class Person:
                     upcoming_birthdays_person_list.append(one)
                 if (nextYearBirthday - today).days <= 30 :
                     upcoming_birthdays_person_list.append(one)
-        print("===== UPCOMING BIRTHDAY =====")
+        print("=====US38: UPCOMING BIRTHDAY =====")
         if upcoming_birthdays_person_list:
             printPrettyTable.printPeoplePrettyTable(upcoming_birthdays_person_list)
         else:
@@ -118,7 +118,7 @@ class Person:
         for person in personList:
             if person.DeathDate != 'NA':
                 deceased_individuals.append(person)
-        print("===== LIST DECEASED INDIVIDUALS =====")
+        print("=====US29: LIST DECEASED INDIVIDUALS =====")
         if deceased_individuals:
             printPrettyTable.printPeoplePrettyTable(deceased_individuals)
         else:
@@ -133,7 +133,7 @@ class Person:
         for person in personList:
             if len(person.FID_spouse)>0 and person.DeathDate == 'NA':
                 living_married.append(person)
-        print("===== LIVING MARRIED PEOPLE =====")
+        print("=====US 30: LIVING MARRIED PEOPLE =====")
         if living_married:
             printPrettyTable.printPeoplePrettyTable(living_married)
         else:
@@ -148,7 +148,7 @@ class Person:
         for person in personList:
             if len(person.FID_spouse)==0 and person.DeathDate == 'NA' and get_age(person)>30:
                 living_single.append(person)
-        print("===== LIVING SINGLE PEOPLE OVER 30 =====")
+        print("=====US31: LIVING SINGLE PEOPLE OVER 30 =====")
         if living_single:
             printPrettyTable.printPeoplePrettyTable(living_single)
         else:
@@ -167,7 +167,7 @@ class Person:
         for birth_date in birth_dict:
             if len(birth_dict[birth_date]) > 1:
                 multiple_births += birth_dict[birth_date]
-        print("===== LIST MULTIPLE BIRTHS =====")
+        print("=====US32: LIST MULTIPLE BIRTHS =====")
         if multiple_births:
             printPrettyTable.printPeoplePrettyTable(multiple_births)
         else:
@@ -185,7 +185,7 @@ class Person:
                 birth = datetime.datetime.strptime(person.BirthDate, "%d %b %Y").date()
                 if 0 <= (today - birth).days <= 30 :
                     recent_birth.append(person)
-        print("===== RECENT BIRTH =====")
+        print("=====US35: RECENT BIRTH =====")
         if recent_birth:
             printPrettyTable.printPeoplePrettyTable(recent_birth)
         else:
@@ -202,7 +202,7 @@ class Person:
                 death = datetime.datetime.strptime(person.DeathDate, "%d %b %Y").date()
                 if 0 <= (today - death).days <= 30 :
                     recent_death.append(person)
-        print("===== RECENT DEATH =====")
+        print("=====US36: RECENT DEATH =====")
         if recent_death:
             printPrettyTable.printPeoplePrettyTable(recent_death)
         else:
@@ -354,7 +354,7 @@ class Family:
                     if (nextYearAnniversary - today).days <= 30:
                         upcoming_anniversaries_family_list.append(oneFamily)
 
-        print("===== UPCOMING ANNIVERSARY =====")
+        print("=====US39: UPCOMING ANNIVERSARY =====")
         if upcoming_anniversaries_family_list:
             printPrettyTable.printFamilyPrettyTable(upcoming_anniversaries_family_list,personList)
         else:
@@ -737,11 +737,12 @@ class Family:
                                 if child == p.INDI_id and p.DeathDate == "NA":
                                     survivor.append(p)
         if len(survivor)>0 and len(dead)>0:
-            print("==========US37====================")
+            print("=========================US37====================")
             print("==========recent dead within 30 days==============")
             printPrettyTable.printPeoplePrettyTable(dead)
             print("============The survivor in the previous dead's family ==============")
             printPrettyTable.printPeoplePrettyTable(survivor)
+            print("====================================================")
         return dead,survivor
 
     def multiple_birth_less_than_5(self,PersonList):
@@ -1023,9 +1024,13 @@ def main():
 
     # Print information list
     allOrphans = list_all_orphans(family,PersonObjectList)
+    print("=====US33: List orphans=======")
     printPrettyTable.printPeoplePrettyTable(allOrphans)
+    print("==========================")
+    print("======US28: Order sibling by age: F00============")
     allSiblingsInOneFamily = list_siblings_by_age("F00", family, PersonObjectList)
     printPrettyTable.printPeoplePrettyTable(allSiblingsInOneFamily)
+    print("=======================")
 
 if __name__ == '__main__':
     main()
